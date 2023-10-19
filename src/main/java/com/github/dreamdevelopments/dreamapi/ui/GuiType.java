@@ -5,24 +5,34 @@ import com.github.dreamdevelopments.dreamapi.messages.Message;
 import com.github.dreamdevelopments.dreamapi.ui.elements.Button;
 import com.github.dreamdevelopments.dreamapi.ui.elements.GuiItem;
 import lombok.Getter;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
 @Getter
 public class GuiType {
 
+    @NotNull
     private final Message title;
+    @NotNull
     private final Set<Button> buttons;
+    @NotNull
     private final Set<GuiItem> items;
+    @Nullable
     private final InventoryType inventoryType;
     private final int size;
+    @NotNull
     private final CustomSound openSound;
+    @NotNull
     private final CustomSound clickSound;
 
-    public GuiType(Message title, int size, Set<GuiItem> items, Set<Button> buttons, CustomSound openSound, CustomSound clickSound) {
+    public GuiType(@NotNull Message title, int size,
+                   @NotNull Set<GuiItem> items, @NotNull Set<Button> buttons,
+                   @NotNull CustomSound openSound, @NotNull CustomSound clickSound) {
         this.title = title;
         this.buttons = buttons;
         this.items = items;
@@ -32,7 +42,9 @@ public class GuiType {
         this.clickSound = clickSound;
     }
 
-    public GuiType(Message title, InventoryType inventoryType, Set<GuiItem> items, Set<Button> buttons, CustomSound openSound, CustomSound clickSound) {
+    public GuiType(@NotNull Message title, @NotNull InventoryType inventoryType,
+                   @NotNull Set<GuiItem> items, @NotNull Set<Button> buttons,
+                   @NotNull CustomSound openSound, @NotNull CustomSound clickSound) {
         this.title = title;
         this.buttons = buttons;
         this.items = items;
