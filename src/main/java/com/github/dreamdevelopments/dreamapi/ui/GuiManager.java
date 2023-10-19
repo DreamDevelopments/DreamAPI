@@ -17,7 +17,6 @@ public final class GuiManager {
             return;
         instance = new GuiManager();
         Bukkit.getPluginManager().registerEvents(new GuiListener(), plugin);
-        Bukkit.createInventorY
     }
 
     @Getter
