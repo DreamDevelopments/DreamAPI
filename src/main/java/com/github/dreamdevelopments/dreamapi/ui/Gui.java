@@ -50,7 +50,16 @@ public abstract class Gui {
     }
 
     public void click(@NotNull InventoryClickEvent event) {
-        event.setCancelled(true);
+        if(event.getClickedInventory() != null)
+            if(event.getClickedInventory().equals(this.inventory) || event.isShiftClick())
+                event.setCancelled(true);
+
+        for(Button button : this.getGuiType().getButtons()) {
+            if(button.isClicked(event.getSlot())) {
+                button.click(event, this);
+                break;
+            }
+        }
         this.onClick(event);
     }
 
