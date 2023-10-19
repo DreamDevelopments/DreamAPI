@@ -1,0 +1,4 @@
+name: DreamAPI
+version: '${version}'
+main: com.github.dreamdevelopments.dreamapi.DreamAPI
+api-version: '1.20'
