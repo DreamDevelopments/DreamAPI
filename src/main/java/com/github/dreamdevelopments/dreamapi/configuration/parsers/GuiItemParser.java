@@ -10,7 +10,7 @@ public class GuiItemParser extends Parser<GuiItem> {
     @Getter
     private static final GuiItemParser instance = new GuiItemParser();
 
-    public GuiItemParser() {
+    private GuiItemParser() {
         super(GuiItem.class);
     }
 
