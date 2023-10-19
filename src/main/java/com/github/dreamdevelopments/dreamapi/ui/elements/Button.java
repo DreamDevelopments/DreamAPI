@@ -25,7 +25,10 @@ public class Button {
 
     public void click(InventoryClickEvent event) {
         this.onClick.accept(event);
+    }
 
+    public boolean isClicked(int slot) {
+        return this.item.isClicked(slot);
     }
 
 
