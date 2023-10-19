@@ -13,9 +13,9 @@ public record GuiItem(ItemStack item, int[] slots) {
             inventory.setItem(slot, newItem);
     }
 
-    public boolean isClicked(int clickedSlot) {
-        for(int slot : this.slots)
-            if(slot == clickedSlot)
+    public boolean isClicked(int slot) {
+        for(int itemSlot : this.slots)
+            if(itemSlot == slot)
                 return true;
         return false;
     }
