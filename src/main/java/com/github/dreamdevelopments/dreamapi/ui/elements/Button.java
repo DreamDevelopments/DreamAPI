@@ -1,20 +1,21 @@
 package com.github.dreamdevelopments.dreamapi.ui.elements;
 
+import com.github.dreamdevelopments.dreamapi.ui.Gui;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public class Button {
 
     @Getter
     private final GuiItem item;
 
-    private final Consumer<InventoryClickEvent> onClick;
+    private final BiConsumer<InventoryClickEvent, Gui> onClick;
 
-    public Button(GuiItem item, Consumer<InventoryClickEvent> onClick) {
+    public Button(GuiItem item, BiConsumer<InventoryClickEvent, Gui> onClick) {
         this.item = item;
         this.onClick = onClick;
     }
@@ -23,8 +24,8 @@ public class Button {
         item.addToInventory(inventory, player);
     }
 
-    public void click(InventoryClickEvent event) {
-        this.onClick.accept(event);
+    public void click(InventoryClickEvent event, Gui gui) {
+        this.onClick.accept(event, gui);
     }
 
     public boolean isClicked(int slot) {
