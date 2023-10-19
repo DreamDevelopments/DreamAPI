@@ -21,7 +21,7 @@ public abstract class Gui {
     public abstract boolean canOpen(@NotNull Player player);
 
     public abstract boolean onOpen(@NotNull Player player);
-    public abstract void onClick(@NotNull InventoryClickEvent event);
+    public abstract boolean onClick(@NotNull InventoryClickEvent event);
 
     public abstract boolean onClose(@NotNull InventoryCloseEvent event);
 
@@ -50,17 +50,18 @@ public abstract class Gui {
     }
 
     public void click(@NotNull InventoryClickEvent event) {
-        if(event.getClickedInventory() != null)
-            if(event.getClickedInventory().equals(this.inventory) || event.isShiftClick())
-                event.setCancelled(true);
-
         for(Button button : this.getGuiType().getButtons()) {
             if(button.isClicked(event.getSlot())) {
                 button.click(event, this);
                 break;
             }
         }
-        this.onClick(event);
+
+        if(!this.onClick(event)) {
+            if(event.getClickedInventory() != null)
+                if(event.getClickedInventory().equals(this.inventory) || event.isShiftClick())
+                    event.setCancelled(true);
+        }
     }
 
     public void update() {
