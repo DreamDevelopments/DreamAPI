@@ -1,5 +1,6 @@
 package com.github.dreamdevelopments.dreamapi.ui;
 
+import com.github.dreamdevelopments.dreamapi.effects.CustomSound;
 import com.github.dreamdevelopments.dreamapi.messages.Message;
 import com.github.dreamdevelopments.dreamapi.ui.elements.Button;
 import com.github.dreamdevelopments.dreamapi.ui.elements.GuiItem;
@@ -18,21 +19,27 @@ public class GuiType {
     private final Set<GuiItem> items;
     private final InventoryType inventoryType;
     private final int size;
+    private final CustomSound openSound;
+    private final CustomSound clickSound;
 
-    public GuiType(Message title, int size, Set<GuiItem> items, Set<Button> buttons) {
+    public GuiType(Message title, int size, Set<GuiItem> items, Set<Button> buttons, CustomSound openSound, CustomSound clickSound) {
         this.title = title;
         this.buttons = buttons;
         this.items = items;
         this.size = size;
         this.inventoryType = null;
+        this.openSound = openSound;
+        this.clickSound = clickSound;
     }
 
-    public GuiType(Message title, InventoryType inventoryType, Set<GuiItem> items, Set<Button> buttons) {
+    public GuiType(Message title, InventoryType inventoryType, Set<GuiItem> items, Set<Button> buttons, CustomSound openSound, CustomSound clickSound) {
         this.title = title;
         this.buttons = buttons;
         this.items = items;
         this.inventoryType = inventoryType;
         this.size = -1;
+        this.openSound = openSound;
+        this.clickSound = clickSound;
     }
 
     public Inventory createInventory(InventoryHolder owner) {
