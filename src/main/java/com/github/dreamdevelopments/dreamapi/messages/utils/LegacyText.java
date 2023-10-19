@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import static net.md_5.bungee.api.ChatColor.COLOR_CHAR;
 
 /**
- * Utility class for managing legacy color codes (&a) and hex codes (#FFFFFF)
+ * Utility class for managing legacy color codes (&amp;a) and hex codes (#FFFFFF)
  */
 public class LegacyText {
 
