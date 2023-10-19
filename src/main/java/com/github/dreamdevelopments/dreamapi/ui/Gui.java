@@ -1,5 +1,6 @@
 package com.github.dreamdevelopments.dreamapi.ui;
 
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -8,7 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class Gui {
 
-    protected Inventory inventory;
+    @Getter
+    private Inventory inventory;
     private final GuiType guiType;
 
     public Gui(GuiType guiType) {
@@ -45,6 +47,10 @@ public abstract class Gui {
     public void click(@NotNull InventoryClickEvent event) {
         event.setCancelled(true);
         this.onClick(event);
+    }
+
+    public void update() {
+        this.guiType.update(this.getInventory(), this.getPlayer());
     }
 
     public Player getPlayer() {
