@@ -1,11 +1,9 @@
 package com.github.dreamdevelopments.dreamapi.configuration;
 
-import com.github.dreamdevelopments.dreamapi.configuration.parsers.CustomSoundParser;
-import com.github.dreamdevelopments.dreamapi.configuration.parsers.GuiItemParser;
-import com.github.dreamdevelopments.dreamapi.configuration.parsers.ItemStackParser;
-import com.github.dreamdevelopments.dreamapi.configuration.parsers.Parser;
+import com.github.dreamdevelopments.dreamapi.configuration.parsers.*;
 import com.github.dreamdevelopments.dreamapi.effects.CustomSound;
 import com.github.dreamdevelopments.dreamapi.messages.Message;
+import com.github.dreamdevelopments.dreamapi.ui.GuiType;
 import com.github.dreamdevelopments.dreamapi.ui.elements.GuiItem;
 import lombok.Getter;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -78,6 +76,11 @@ public abstract class Config extends YamlConfiguration{
     @NotNull
     public GuiItem getGuiItem(@NotNull String path) {
         return GuiItemParser.getInstance().loadFromConfig(this, path);
+    }
+
+    @NotNull
+    public GuiType getGuiType(@NotNull String path) {
+        return GuiTypeParser.getInstance().loadFromConfig(this, path);
     }
 
     @NotNull
