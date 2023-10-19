@@ -1,25 +1,9 @@
-plugins {
-    id 'java-library'
-    id 'maven-publish'
-}
-
 allprojects {
     version = "0.0.2"
     group = 'com.github.dreamdevelopments'
 
-    sourceCompatibility = 17
-    targetCompatibility = 17
-}
-
-subprojects {
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
-
-
-    java {
-        withSourcesJar()
-        withJavadocJar()
-    }
 
     publishing {
         publications {
@@ -29,6 +13,27 @@ subprojects {
                 version project.version
                 from components.java
             }
+        }
+    }
+
+    sourceCompatibility = 17
+    targetCompatibility = 17
+
+    def targetJavaVersion = 17
+    java {
+        withSourcesJar()
+        withJavadocJar()
+        def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
+        if (JavaVersion.current() < javaVersion) {
+            //toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+            options.release = targetJavaVersion
         }
     }
 }
