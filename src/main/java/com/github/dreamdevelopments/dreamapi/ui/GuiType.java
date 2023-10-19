@@ -54,8 +54,13 @@ public class GuiType {
         this.clickSound = clickSound;
     }
 
-    public Inventory createInventory(InventoryHolder owner) {
-        return this.inventoryType == null ? this.title.createInventory(owner, this.size) : this.title.createInventory(owner, this.inventoryType);
+    public Inventory createInventory(Player owner) {
+        Inventory inventory = this.inventoryType == null ? this.title.createInventory(owner, this.size) : this.title.createInventory(owner, this.inventoryType);
+        for(GuiItem item : this.items)
+            item.addToInventory(inventory, owner);
+        for(Button button : this.buttons)
+            button.update(inventory, owner);
+        return inventory;
     }
 
 }
