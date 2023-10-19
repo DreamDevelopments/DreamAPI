@@ -5,7 +5,6 @@ import com.github.dreamdevelopments.dreamapi.effects.CustomSound;
 import com.github.dreamdevelopments.dreamapi.messages.Message;
 import com.github.dreamdevelopments.dreamapi.ui.GuiType;
 import com.github.dreamdevelopments.dreamapi.ui.elements.GuiItem;
-import com.github.dreamdevelopments.dreamapi.utils.Value;
 import lombok.Getter;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -83,12 +82,7 @@ public abstract class Config extends YamlConfiguration{
     public GuiType getGuiType(@NotNull String path) {
         return GuiTypeParser.getInstance().loadFromConfig(this, path);
     }
-
-    @NotNull
-    public Value getValue(@NotNull String path) {
-        return ValueParser.getInstance().loadFromConfig(this, path);
-    }
-
+    
     @NotNull
     public Message getMessage(@NotNull String path) {
         return Message.fromText(this.getString(path));
