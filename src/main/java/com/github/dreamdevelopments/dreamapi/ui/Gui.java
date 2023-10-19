@@ -3,12 +3,18 @@ package com.github.dreamdevelopments.dreamapi.ui;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class Gui {
 
     protected Player player;
-    private GuiType guiType;
+    protected Inventory inventory;
+    private final GuiType guiType;
+
+    public Gui(GuiType guiType) {
+        this.guiType = guiType;
+    }
 
     public abstract boolean onOpen(@NotNull Player player);
     public abstract void onClick(@NotNull InventoryClickEvent event);
@@ -24,8 +30,12 @@ public abstract class Gui {
     }
 
     public void open(@NotNull Player player) {
-        if(this.onOpen(player))
+        if(this.onOpen(player)) {
+            Inventory inventory = this.guiType.createInventory(player);
+            this.inventory = inventory;
+            player.openInventory(inventory);
             this.registerInventory(player);
+        }
     }
 
     public void close(@NotNull InventoryCloseEvent event) {
@@ -36,6 +46,7 @@ public abstract class Gui {
     public void click(@NotNull InventoryClickEvent event) {
         event.setCancelled(true);
         this.onClick(event);
+    }
 
     }
 
