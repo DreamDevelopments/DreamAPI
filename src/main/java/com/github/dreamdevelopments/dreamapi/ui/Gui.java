@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class Gui {
 
-    protected Player player;
     protected Inventory inventory;
     private final GuiType guiType;
 
@@ -40,7 +39,7 @@ public abstract class Gui {
 
     public void close(@NotNull InventoryCloseEvent event) {
         if(this.onClose(event))
-            this.unregisterInventory(this.player);
+            this.unregisterInventory(this.getPlayer());
     }
 
     public void click(@NotNull InventoryClickEvent event) {
@@ -48,6 +47,8 @@ public abstract class Gui {
         this.onClick(event);
     }
 
+    public Player getPlayer() {
+        return (Player)this.inventory.getHolder();
     }
 
 }
