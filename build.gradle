@@ -1,9 +1,42 @@
-plugins {
-    id 'java-library'
-}
+allprojects {
+    version = "0.0.2"
+    group = 'com.github.dreamdevelopments'
 
-group = 'com.github.dreamdevelopments'
-version = '0.0.1'
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                groupId project.group
+                artifactId project.name
+                version project.version
+                from components.java
+            }
+        }
+    }
+
+    sourceCompatibility = 17
+    targetCompatibility = 17
+
+    def targetJavaVersion = 17
+    java {
+        withSourcesJar()
+        withJavadocJar()
+        def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
+        if (JavaVersion.current() < javaVersion) {
+            //toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+            options.release = targetJavaVersion
+        }
+    }
+}
 
 repositories {
     mavenCentral()
@@ -29,22 +62,6 @@ dependencies {
 
     compileOnly 'me.clip:placeholderapi:2.11.4'
 
-}
-
-def targetJavaVersion = 17
-java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-        options.release = targetJavaVersion
-    }
 }
 
 processResources {
