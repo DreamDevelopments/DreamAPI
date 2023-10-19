@@ -56,11 +56,15 @@ public class GuiType {
 
     public Inventory createInventory(Player owner) {
         Inventory inventory = this.inventoryType == null ? this.title.createInventory(owner, this.size) : this.title.createInventory(owner, this.inventoryType);
+        this.update(inventory, owner);
+        return inventory;
+    }
+
+    public void update(Inventory inventory, Player owner) {
         for(GuiItem item : this.items)
             item.addToInventory(inventory, owner);
         for(Button button : this.buttons)
             button.update(inventory, owner);
-        return inventory;
     }
 
 }
