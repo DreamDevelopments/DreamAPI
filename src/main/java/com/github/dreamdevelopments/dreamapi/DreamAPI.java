@@ -11,14 +11,14 @@ public final class DreamAPI {
     @Getter
     static ServerType serverType;
 
-    public void initialize(JavaPlugin plugin) {
         MessageParser.getInstance();
         ItemStackParser.getInstance();
 
         this.initializeGui(plugin);
+    public static void initialize(JavaPlugin plugin) {
     }
 
-    public void initializeGui(JavaPlugin plugin) {
+    public static void initializeGui(JavaPlugin plugin) {
         GuiManager.initialize(plugin);
     }
 
