@@ -2,13 +2,17 @@ package com.github.dreamdevelopments.dreamapi.configuration.parsers;
 
 import com.github.dreamdevelopments.dreamapi.configuration.Config;
 import com.github.dreamdevelopments.dreamapi.ui.elements.GuiItem;
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 public class GuiItemParser extends Parser<GuiItem> {
 
-    @Getter
-    private static final GuiItemParser instance = new GuiItemParser();
+    private static GuiItemParser instance;
+
+    public static GuiItemParser getInstance() {
+        if(instance == null)
+            instance = new GuiItemParser();
+        return instance;
+    }
 
     private GuiItemParser() {
         super(GuiItem.class);

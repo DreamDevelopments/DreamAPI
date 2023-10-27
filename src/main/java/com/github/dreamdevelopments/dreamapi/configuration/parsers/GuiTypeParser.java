@@ -5,7 +5,6 @@ import com.github.dreamdevelopments.dreamapi.effects.CustomSound;
 import com.github.dreamdevelopments.dreamapi.messages.Message;
 import com.github.dreamdevelopments.dreamapi.ui.GuiType;
 import com.github.dreamdevelopments.dreamapi.ui.elements.GuiItem;
-import lombok.Getter;
 import org.bukkit.event.inventory.InventoryType;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,8 +13,13 @@ import java.util.Set;
 
 public class GuiTypeParser extends Parser<GuiType> {
 
-    @Getter
-    private static final GuiTypeParser instance = new GuiTypeParser();
+    private static GuiTypeParser instance;
+
+    public static GuiTypeParser getInstance() {
+        if(instance == null)
+            instance = new GuiTypeParser();
+        return instance;
+    }
 
     private GuiTypeParser() {
         super(GuiType.class);

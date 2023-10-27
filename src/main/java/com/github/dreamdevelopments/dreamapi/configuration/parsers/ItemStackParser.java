@@ -2,7 +2,6 @@ package com.github.dreamdevelopments.dreamapi.configuration.parsers;
 
 import com.github.dreamdevelopments.dreamapi.configuration.Config;
 import com.github.dreamdevelopments.dreamapi.utils.ColorUtils;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,8 +18,13 @@ import java.util.Objects;
 
 public final class ItemStackParser extends Parser<ItemStack> {
 
-    @Getter
-    private static final ItemStackParser instance = new ItemStackParser();
+    private static ItemStackParser instance;
+
+    public static ItemStackParser getInstance() {
+        if(instance == null)
+            instance = new ItemStackParser();
+        return instance;
+    }
 
     private ItemStackParser() {
         super(ItemStack.class);
