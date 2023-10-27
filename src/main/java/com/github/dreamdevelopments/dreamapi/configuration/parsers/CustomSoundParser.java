@@ -2,21 +2,18 @@ package com.github.dreamdevelopments.dreamapi.configuration.parsers;
 
 import com.github.dreamdevelopments.dreamapi.configuration.Config;
 import com.github.dreamdevelopments.dreamapi.effects.CustomSound;
+import lombok.Getter;
 import org.bukkit.Sound;
 import org.jetbrains.annotations.NotNull;
 
 public class CustomSoundParser extends Parser<CustomSound> {
 
+    @Getter
     private static CustomSoundParser instance;
 
-    public static CustomSoundParser getInstance() {
-        if(instance == null)
-            instance = new CustomSoundParser();
-        return instance;
-    }
-
-    private CustomSoundParser() {
+    public CustomSoundParser() {
         super(CustomSound.class);
+        instance = this;
     }
 
     @Override

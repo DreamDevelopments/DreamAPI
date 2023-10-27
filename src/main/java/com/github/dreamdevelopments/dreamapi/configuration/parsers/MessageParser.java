@@ -2,20 +2,17 @@ package com.github.dreamdevelopments.dreamapi.configuration.parsers;
 
 import com.github.dreamdevelopments.dreamapi.configuration.Config;
 import com.github.dreamdevelopments.dreamapi.messages.Message;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 public class MessageParser extends Parser<Message> {
 
+    @Getter
     private static MessageParser instance;
 
-    public static MessageParser getInstance() {
-        if(instance == null)
-            instance = new MessageParser();
-        return instance;
-    }
-
-    private MessageParser() {
+    public MessageParser() {
         super(Message.class);
+        instance = this;
     }
 
     @Override
