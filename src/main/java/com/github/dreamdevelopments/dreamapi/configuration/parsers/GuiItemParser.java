@@ -8,10 +8,11 @@ import org.jetbrains.annotations.NotNull;
 public class GuiItemParser extends Parser<GuiItem> {
 
     @Getter
-    private static final GuiItemParser instance = new GuiItemParser();
+    private static GuiItemParser instance;
 
-    private GuiItemParser() {
+    public GuiItemParser() {
         super(GuiItem.class);
+        instance = this;
     }
 
     @Override

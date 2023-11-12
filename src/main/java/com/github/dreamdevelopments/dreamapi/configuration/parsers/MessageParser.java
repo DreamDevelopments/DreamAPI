@@ -8,10 +8,11 @@ import org.jetbrains.annotations.NotNull;
 public class MessageParser extends Parser<Message> {
 
     @Getter
-    private final static MessageParser instance = new MessageParser();
+    private static MessageParser instance;
 
-    private MessageParser() {
+    public MessageParser() {
         super(Message.class);
+        instance = this;
     }
 
     @Override

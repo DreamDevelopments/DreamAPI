@@ -20,10 +20,11 @@ import java.util.Objects;
 public final class ItemStackParser extends Parser<ItemStack> {
 
     @Getter
-    private static final ItemStackParser instance = new ItemStackParser();
+    private static ItemStackParser instance;
 
-    private ItemStackParser() {
+    public ItemStackParser() {
         super(ItemStack.class);
+        instance = this;
     }
 
     @Override

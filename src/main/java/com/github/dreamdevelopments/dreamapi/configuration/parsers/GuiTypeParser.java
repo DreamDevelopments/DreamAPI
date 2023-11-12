@@ -15,10 +15,11 @@ import java.util.Set;
 public class GuiTypeParser extends Parser<GuiType> {
 
     @Getter
-    private static final GuiTypeParser instance = new GuiTypeParser();
+    private static GuiTypeParser instance;
 
-    private GuiTypeParser() {
+    public GuiTypeParser() {
         super(GuiType.class);
+        instance = this;
     }
 
     @Override

@@ -9,10 +9,11 @@ import org.jetbrains.annotations.NotNull;
 public class CustomSoundParser extends Parser<CustomSound> {
 
     @Getter
-    private final static CustomSoundParser instance = new CustomSoundParser();
+    private static CustomSoundParser instance;
 
-    private CustomSoundParser() {
+    public CustomSoundParser() {
         super(CustomSound.class);
+        instance = this;
     }
 
     @Override
