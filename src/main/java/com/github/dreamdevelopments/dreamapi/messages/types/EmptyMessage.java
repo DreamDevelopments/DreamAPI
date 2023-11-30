@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public final class EmptyMessage implements Message {
 
     @Getter
-    private static EmptyMessage emptyMessage;
+    private final static EmptyMessage emptyMessage = new EmptyMessage();
 
     @Override
     public MessageType getType() {
