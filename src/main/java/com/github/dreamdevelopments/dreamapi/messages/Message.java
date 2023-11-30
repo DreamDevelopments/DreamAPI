@@ -63,6 +63,12 @@ public interface Message {
     Inventory createInventory(InventoryHolder owner, InventoryType type);
 
     /**
+     * Clone this message
+     * @return Returns an exact copy of this message
+     */
+    Message clone();
+
+    /**
      * Get the raw value of the message
      * @return Message as a string
      */

@@ -37,6 +37,11 @@ public final class EmptyMessage implements Message {
     }
 
     @Override
+    public Message clone() {
+        return this;
+    }
+
+    @Override
     public String toString() {
         return "";
     }

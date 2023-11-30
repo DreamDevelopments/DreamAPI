@@ -60,6 +60,11 @@ public class LegacyMessage implements Message {
         return Bukkit.createInventory(owner, type, this.getModifiedMessage((Player)owner));
     }
 
+    @Override
+    public Message clone() {
+        return new LegacyMessage(this.message, this.hasPlaceholders);
+    }
+
     private String getModifiedMessage(Player player) {
         if(hasPlaceholders)
             return PAPIHandler.replacePlaceholders(this.message, player);

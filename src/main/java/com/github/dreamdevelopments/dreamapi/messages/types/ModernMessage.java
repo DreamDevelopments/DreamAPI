@@ -85,6 +85,13 @@ public class ModernMessage implements Message {
     }
 
     @Override
+    public Message clone() {
+        if(this.hasPlaceholders)
+            return new ModernMessage(this.rawMessage);
+        return new ModernMessage(this.message);
+    }
+
+    @Override
     public String toString() {
         return this.rawMessage;
     }
