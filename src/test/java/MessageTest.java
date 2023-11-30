@@ -93,6 +93,13 @@ public class MessageTest {
 
         Assertions.assertTrue(emptyMessage.equals(message));
 
+        // Test concat
+
+        message = Message.fromText("<yellow>Test");
+        Message result = Message.fromText("<yellow>Test Message");
+        Assertions.assertTrue(message.concat(" Message", true).equals(result));
+        
+        Assertions.assertTrue(message.concat(Message.fromText(" Message")).equals(result));
     }
 
 }
