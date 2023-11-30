@@ -21,6 +21,7 @@ public class MessageTest {
     @Test @SuppressWarnings("deprecation")
     public void testSpigotMessages() {
         try(MockedStatic<Bukkit> bukkit = Mockito.mockStatic(Bukkit.class)) {
+            //TODO: Replace with realistic version example
             bukkit.when(Bukkit::getVersion).thenReturn("Spigot 1.20.1");
             DreamAPI.initializeServer();
             Assertions.assertEquals(ServerType.SPIGOT, DreamAPI.getServerType());
@@ -44,6 +45,7 @@ public class MessageTest {
     @Test
     public void testPaperMessages() {
         try(MockedStatic<Bukkit> bukkit = Mockito.mockStatic(Bukkit.class)) {
+            //TODO: Replace with realistic version example
             bukkit.when(Bukkit::getVersion).thenReturn("Paper 1.20.1");
             DreamAPI.initializeServer();
             Assertions.assertEquals(ServerType.PAPER, DreamAPI.getServerType());
