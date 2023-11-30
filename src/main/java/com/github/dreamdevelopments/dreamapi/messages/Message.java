@@ -25,7 +25,7 @@ public interface Message {
     }
 
     static Message fromText(@Nullable String message, boolean hasPlaceholders) {
-        if(message == null)
+        if(message == null || message.isEmpty())
             return EmptyMessage.getEmptyMessage();
 
         return switch (DreamAPI.getServerType()) {
