@@ -42,6 +42,16 @@ public final class EmptyMessage implements Message {
     }
 
     @Override
+    public Message concat(String text, boolean atEnd) {
+        return Message.fromText(text);
+    }
+
+    @Override
+    public Message concat(Message message) {
+        return message;
+    }
+
+    @Override
     public Message clone() {
         return this;
     }

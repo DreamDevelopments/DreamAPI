@@ -66,6 +66,16 @@ public class LegacyMessage implements Message {
     }
 
     @Override
+    public Message concat(String text, boolean atEnd) {
+        return new LegacyMessage(atEnd ? this.message + text : text + this.message, this.hasPlaceholders);
+    }
+
+    @Override
+    public Message concat(Message message) {
+        return new LegacyMessage(this.message + message.toString(), this.hasPlaceholders);
+    }
+
+    @Override
     public Message clone() {
         return new LegacyMessage(this.message, this.hasPlaceholders);
     }

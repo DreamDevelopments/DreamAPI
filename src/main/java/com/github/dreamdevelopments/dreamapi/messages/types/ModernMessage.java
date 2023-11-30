@@ -91,6 +91,16 @@ public class ModernMessage implements Message {
     }
 
     @Override
+    public Message concat(String text, boolean atEnd) {
+        return new ModernMessage(atEnd ? this.rawMessage + text : text + this.rawMessage, this.hasPlaceholders);
+    }
+
+    @Override
+    public Message concat(Message message) {
+        return new ModernMessage(this.rawMessage + ((ModernMessage)message).rawMessage, this.hasPlaceholders);
+    }
+
+    @Override
     public Message clone() {
         return new ModernMessage(this.rawMessage, this.hasPlaceholders);
     }

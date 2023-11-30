@@ -71,6 +71,21 @@ public interface Message {
     Message replaceText(String oldText, String newText);
 
     /**
+     * Concatenate a string with this message
+     * @param text The string to concatenate
+     * @param atEnd Whether to concatenate at the end or the beginning
+     * @return The concatenated message
+     */
+    Message concat(String text, boolean atEnd);
+
+    /**
+     * Concatenate two messages together
+     * @param message The message to concatenate
+     * @return The concatenated message
+     */
+    Message concat(Message message);
+
+    /**
      * Clone this message
      * @return Returns an exact copy of this message
      */
