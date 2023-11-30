@@ -34,7 +34,7 @@ public interface Message {
         };
     }
 
-/**
+    /**
      * Get the type of this message
      * @return The message type
      */
