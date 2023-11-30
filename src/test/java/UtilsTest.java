@@ -28,4 +28,10 @@ public class UtilsTest {
         formattedTime = TextUtils.formatTime(3600);
         Assertions.assertEquals("60:00", formattedTime);
     }
+
+    @Test
+    public void testFontUtils() {
+        String fontMessage = FontUtils.toSmallCap("Test MessAgE :)");
+        Assertions.assertEquals(String.valueOf(new char[]{0x1D1B, 0x1D07, 0x0455, 0x1D1B, ' ', 0x1D0D, 0x1D07, 0x0455, 0x0455, 0x1D00, 0x0262, 0x1D07, ' ', ':', ')'}), fontMessage);
+    }
 }
