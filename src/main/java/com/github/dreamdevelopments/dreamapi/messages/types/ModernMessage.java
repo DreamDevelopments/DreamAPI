@@ -1,6 +1,7 @@
 package com.github.dreamdevelopments.dreamapi.messages.types;
 
 import com.github.dreamdevelopments.dreamapi.messages.Message;
+import com.github.dreamdevelopments.dreamapi.messages.MessageType;
 import com.github.dreamdevelopments.dreamapi.messages.utils.TextConverter;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -31,6 +32,11 @@ public class ModernMessage implements Message {
     public ModernMessage(@NotNull String message) {
         this.message = minimessage.deserialize(TextConverter.legacyToModern(message));
         this.hashCode = message.hashCode();
+    }
+
+    @Override
+    public MessageType getType() {
+        return MessageType.MODERN;
     }
 
     @Override

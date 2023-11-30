@@ -34,6 +34,12 @@ public interface Message {
         };
     }
 
+/**
+     * Get the type of this message
+     * @return The message type
+     */
+    MessageType getType();
+
     /**
      * Sends the message to a player
      * @param player The player that receives the message

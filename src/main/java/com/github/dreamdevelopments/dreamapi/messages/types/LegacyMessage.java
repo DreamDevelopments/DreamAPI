@@ -1,6 +1,7 @@
 package com.github.dreamdevelopments.dreamapi.messages.types;
 
 import com.github.dreamdevelopments.dreamapi.messages.Message;
+import com.github.dreamdevelopments.dreamapi.messages.MessageType;
 import com.github.dreamdevelopments.dreamapi.messages.utils.LegacyText;
 import com.github.dreamdevelopments.dreamapi.messages.utils.TextConverter;
 import lombok.Getter;
@@ -25,6 +26,11 @@ public class LegacyMessage implements Message {
      */
     public LegacyMessage(@NotNull String message) {
         this.message = LegacyText.replaceAllColorCodes(TextConverter.modernToLegacy(message));
+    }
+
+    @Override
+    public MessageType getType() {
+        return MessageType.LEGACY;
     }
 
     @Override

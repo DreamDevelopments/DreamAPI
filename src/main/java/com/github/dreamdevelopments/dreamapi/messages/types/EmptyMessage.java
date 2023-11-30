@@ -1,6 +1,7 @@
 package com.github.dreamdevelopments.dreamapi.messages.types;
 
 import com.github.dreamdevelopments.dreamapi.messages.Message;
+import com.github.dreamdevelopments.dreamapi.messages.MessageType;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,6 +17,11 @@ public final class EmptyMessage implements Message {
 
     @Getter
     private static EmptyMessage emptyMessage;
+
+    @Override
+    public MessageType getType() {
+        return MessageType.EMPTY;
+    }
 
     @Override
     public void sendMessage(@NotNull Player player) {}

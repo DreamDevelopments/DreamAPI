@@ -2,6 +2,7 @@ package com.github.dreamdevelopments.dreamapi.messages.types;
 
 import com.github.dreamdevelopments.dreamapi.messages.Message;
 import com.github.dreamdevelopments.dreamapi.handlers.PAPIHandler;
+import com.github.dreamdevelopments.dreamapi.messages.MessageType;
 import com.github.dreamdevelopments.dreamapi.messages.utils.TextConverter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,6 +17,11 @@ public class PlaceholderModernMessage implements Message {
 
     public PlaceholderModernMessage(@NotNull String message) {
         this.rawMessage = TextConverter.legacyToModern(message);
+    }
+
+    @Override
+    public MessageType getType() {
+        return MessageType.MODERN;
     }
 
     @Override
