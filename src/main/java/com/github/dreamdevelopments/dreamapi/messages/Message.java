@@ -21,12 +21,16 @@ public interface Message {
      * @return The message object
      */
     static Message fromText(@Nullable String message) {
+        return fromText(message, true);
+    }
+
+    static Message fromText(@Nullable String message, boolean hasPlaceholders) {
         if(message == null)
             return EmptyMessage.getEmptyMessage();
 
         return switch (DreamAPI.getServerType()) {
-            case SPIGOT -> PAPIHandler.hasPlaceholders(message) ? new PlaceholderLegacyMessage(message) : new LegacyMessage(message);
-            case PAPER -> PAPIHandler.hasPlaceholders(message) ? new PlaceholderModernMessage(message) : new ModernMessage(message);
+            case SPIGOT -> PAPIHandler.hasPlaceholders(message) && hasPlaceholders ? new PlaceholderLegacyMessage(message) : new LegacyMessage(message);
+            case PAPER -> PAPIHandler.hasPlaceholders(message) && hasPlaceholders ? new PlaceholderModernMessage(message) : new ModernMessage(message);
         };
     }
 
