@@ -57,6 +57,15 @@ dependencies {
 
     compileOnly 'me.clip:placeholderapi:2.11.4'
 
+
+    testImplementation 'io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT'
+    testImplementation 'org.mockito:mockito-inline:4.11.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
+
+}
+
+test {
+    useJUnitPlatform()
 }
 
 processResources {
