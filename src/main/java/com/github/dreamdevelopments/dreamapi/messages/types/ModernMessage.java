@@ -48,6 +48,16 @@ public class ModernMessage implements Message {
         this.hasPlaceholders = hasPlaceholders;
     }
 
+    /**
+     * Creates a new message object that uses the Adventure API used in Paper
+     * @param component the adventure api component for the message
+     */
+    public ModernMessage(@NotNull Component component) {
+        this.message = component;
+        this.rawMessage = minimessage.serialize(component);
+        this.hasPlaceholders = false;
+    }
+
     @Override
     public MessageType getType() {
         return MessageType.MODERN;
@@ -75,6 +85,27 @@ public class ModernMessage implements Message {
     }
 
     @Override
+    public Message replaceText(String oldText, String newText) {
+        return new ModernMessage(this.rawMessage.replace(oldText, newText), this.hasPlaceholders);
+
+    }
+
+    @Override
+    public Message concat(String text, boolean atEnd) {
+        return new ModernMessage(atEnd ? this.rawMessage + text : text + this.rawMessage, this.hasPlaceholders);
+    }
+
+    @Override
+    public Message concat(Message message) {
+        return new ModernMessage(this.rawMessage + ((ModernMessage)message).rawMessage, this.hasPlaceholders);
+    }
+
+    @Override
+    public Message clone() {
+        return new ModernMessage(this.rawMessage, this.hasPlaceholders);
+    }
+
+    @Override
     public String toString() {
         return this.rawMessage;
     }
@@ -82,5 +113,10 @@ public class ModernMessage implements Message {
     @Override
     public int hashCode() {
         return this.rawMessage.hashCode();
+    }
+
+    @Override
+    public boolean equals(Message message) {
+        return message.getType().equals(this.getType()) && ((ModernMessage)message).getMessage().equals(this.getMessage());
     }
 }

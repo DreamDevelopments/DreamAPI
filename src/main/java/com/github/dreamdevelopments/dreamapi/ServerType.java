@@ -6,13 +6,16 @@ import org.bukkit.Bukkit;
 @Getter
 public enum ServerType {
 
-    SPIGOT("spigot"),
-    PAPER("paper");
+    SPIGOT("spigot", false),
+    PAPER("paper", true);
 
     private final String name;
 
-    ServerType(String name) {
+    private final boolean modern;
+
+    ServerType(String name, boolean modern) {
         this.name = name;
+        this.modern = modern;
     }
 
 }

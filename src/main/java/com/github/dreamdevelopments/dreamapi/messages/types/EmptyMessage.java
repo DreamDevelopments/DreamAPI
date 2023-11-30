@@ -37,7 +37,32 @@ public final class EmptyMessage implements Message {
     }
 
     @Override
+    public Message replaceText(String oldText, String newText) {
+        return this;
+    }
+
+    @Override
+    public Message concat(String text, boolean atEnd) {
+        return Message.fromText(text);
+    }
+
+    @Override
+    public Message concat(Message message) {
+        return message;
+    }
+
+    @Override
+    public Message clone() {
+        return this;
+    }
+
+    @Override
     public String toString() {
         return "";
+    }
+
+    @Override
+    public boolean equals(Message message) {
+        return message.getType().equals(this.getType());
     }
 }

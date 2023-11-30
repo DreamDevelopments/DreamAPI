@@ -60,6 +60,26 @@ public class LegacyMessage implements Message {
         return Bukkit.createInventory(owner, type, this.getModifiedMessage((Player)owner));
     }
 
+    @Override
+    public Message replaceText(String oldText, String newText) {
+        return new LegacyMessage(this.message.replace(oldText, newText), this.hasPlaceholders);
+    }
+
+    @Override
+    public Message concat(String text, boolean atEnd) {
+        return new LegacyMessage(atEnd ? this.message + text : text + this.message, this.hasPlaceholders);
+    }
+
+    @Override
+    public Message concat(Message message) {
+        return new LegacyMessage(this.message + message.toString(), this.hasPlaceholders);
+    }
+
+    @Override
+    public Message clone() {
+        return new LegacyMessage(this.message, this.hasPlaceholders);
+    }
+
     private String getModifiedMessage(Player player) {
         if(hasPlaceholders)
             return PAPIHandler.replacePlaceholders(this.message, player);
@@ -71,9 +91,15 @@ public class LegacyMessage implements Message {
         return this.message;
     }
 
+
     @Override
     public int hashCode() {
         return this.message.hashCode();
+    }
+
+    @Override
+    public boolean equals(Message message) {
+        return message.getType().equals(this.getType()) && message.toString().equals(this.toString());
     }
 
 }

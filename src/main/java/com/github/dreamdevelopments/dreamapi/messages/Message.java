@@ -63,6 +63,35 @@ public interface Message {
     Inventory createInventory(InventoryHolder owner, InventoryType type);
 
     /**
+     * Replace all occurrences of a string with another string
+     * @param oldText The string to replace
+     * @param newText The string to replace with
+     * @return A copy of the message with the string replaced
+     */
+    Message replaceText(String oldText, String newText);
+
+    /**
+     * Concatenate a string with this message
+     * @param text The string to concatenate
+     * @param atEnd Whether to concatenate at the end or the beginning
+     * @return The concatenated message
+     */
+    Message concat(String text, boolean atEnd);
+
+    /**
+     * Concatenate two messages together
+     * @param message The message to concatenate
+     * @return The concatenated message
+     */
+    Message concat(Message message);
+
+    /**
+     * Clone this message
+     * @return Returns an exact copy of this message
+     */
+    Message clone();
+
+    /**
      * Get the raw value of the message
      * @return Message as a string
      */
@@ -71,5 +100,12 @@ public interface Message {
 
     @Override
     int hashCode();
+
+    /**
+     * Check if this message is equal to another message
+     * @param message The message to compare
+     * @return Whether the messages are equal
+     */
+    boolean equals(Message message);
 
 }
