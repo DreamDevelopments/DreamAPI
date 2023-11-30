@@ -11,8 +11,12 @@ public final class DreamAPI {
     @Getter
     static ServerType serverType;
 
+    @Getter
+    static boolean placeholderAPIEnabled;
+
     public static void initialize(JavaPlugin plugin) {
         initializeServer();
+        initializeHandlers();
         initializeParsers();
         initializeGui(plugin);
     }
@@ -23,6 +27,10 @@ public final class DreamAPI {
                 DreamAPI.serverType = serverType;
             }
         }
+    }
+
+    public static void initializeHandlers() {
+        placeholderAPIEnabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
     }
 
     public static void initializeParsers() {

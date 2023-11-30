@@ -1,5 +1,6 @@
 package com.github.dreamdevelopments.dreamapi.handlers;
 
+import com.github.dreamdevelopments.dreamapi.DreamAPI;
 import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -12,9 +13,6 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class PAPIHandler {
 
-    @Getter
-    private static final boolean placeholderAPIEnabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
-
     /**
      * Replaces PlaceholderAPI placeholders in a string
      * @param message The string to replace the placeholders in
@@ -22,7 +20,7 @@ public class PAPIHandler {
      * @return The string with placeholders replaced
      */
     public static String replacePlaceholders(String message, Player player) {
-        if(placeholderAPIEnabled)
+        if(DreamAPI.isPlaceholderAPIEnabled())
             return PlaceholderAPI.setPlaceholders(player, message);
         return message;
     }
@@ -33,13 +31,13 @@ public class PAPIHandler {
      * @return Whether the message contains placeholders or not
      */
     public static boolean hasPlaceholders(String message) {
-        if(!placeholderAPIEnabled)
+        if(!DreamAPI.isPlaceholderAPIEnabled())
             return false;
         return PlaceholderAPI.containsPlaceholders(message);
     }
 
     public static ItemStack replacePlaceholders(ItemStack itemStack, Player player) {
-        if(!placeholderAPIEnabled)
+        if(!DreamAPI.isPlaceholderAPIEnabled())
             return itemStack;
         ItemStack newItem = itemStack.clone();
         ItemMeta meta = newItem.getItemMeta();
