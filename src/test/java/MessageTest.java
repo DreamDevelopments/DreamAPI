@@ -2,6 +2,8 @@ import com.github.dreamdevelopments.dreamapi.DreamAPI;
 import com.github.dreamdevelopments.dreamapi.ServerType;
 import com.github.dreamdevelopments.dreamapi.handlers.PAPIHandler;
 import com.github.dreamdevelopments.dreamapi.messages.Message;
+import com.github.dreamdevelopments.dreamapi.messages.types.ModernMessage;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.junit.jupiter.api.Assertions;
@@ -34,6 +36,12 @@ public class MessageTest {
                 Assertions.assertTrue(message.getType().isLegacy());
                 Assertions.assertEquals(ChatColor.BOLD + "" + ChatColor.RED + "Test Message", message.toString());
 
+                // Test replace text
+                message = Message.fromText("&l<blue>Test Message</blue>");
+                Message replacedMessage = message.replaceText("Test", "New");
+                Assertions.assertEquals(ChatColor.BOLD + "" + ChatColor.BLUE + "New Message", replacedMessage.toString());
+                Assertions.assertTrue(replacedMessage.equals(Message.fromText("&l<blue>New Message</blue>")));
+
                 testGenericMessages(message);
 
             }
@@ -57,6 +65,15 @@ public class MessageTest {
                 Assertions.assertTrue(message.getType().isModern());
                 Assertions.assertEquals("<bold><red>Test Message</red>", message.toString());
 
+                Message componentMessage = new ModernMessage(MiniMessage.miniMessage().deserialize("<bold><red>Test Message</red>"));
+                Assertions.assertTrue(message.equals(componentMessage));
+
+                // Test replace text
+                message = Message.fromText("&l<green>Test Message</green>");
+                Message replacedMessage = message.replaceText("Test", "New");
+                Assertions.assertEquals("<bold><green>New Message</green>", replacedMessage.toString());
+                Assertions.assertTrue(replacedMessage.equals(Message.fromText("&l<green>New Message")));
+
                 testGenericMessages(message);
             }
         }
@@ -75,6 +92,7 @@ public class MessageTest {
         Assertions.assertTrue(message.getType().isEmpty());
 
         Assertions.assertTrue(emptyMessage.equals(message));
+
     }
 
 }
