@@ -19,7 +19,7 @@ public final class DreamAPI {
 
     public static void initializeServer() {
         for(ServerType serverType : ServerType.values()) {
-            if(Bukkit.getVersion().contains(serverType.getName())) {
+            if(Bukkit.getVersion().toLowerCase().contains(serverType.getName())) {
                 DreamAPI.serverType = serverType;
             }
         }
