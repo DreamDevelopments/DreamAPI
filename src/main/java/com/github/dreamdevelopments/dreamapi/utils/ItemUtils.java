@@ -38,8 +38,8 @@ public class ItemUtils {
     @NotNull
     public static List<Message> getItemLore(@NotNull ItemMeta meta) {
         if(DreamAPI.getServerType().isModern())
-            return getLegacyItemLore(meta);
-        return getModernItemLore(meta);
+            return getModernItemLore(meta);
+        return getLegacyItemLore(meta);
     }
 
     @NotNull @SuppressWarnings("deprecation")
