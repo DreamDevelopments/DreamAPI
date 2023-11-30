@@ -13,6 +13,28 @@ import java.util.List;
 
 public class ItemUtils {
 
+    public static void setItemLore(@NotNull ItemMeta meta, @NotNull List<Message> lore) {
+        if(DreamAPI.getServerType().isModern())
+            setModernItemLore(meta, lore);
+        else
+            setLegacyItemLore(meta, lore);
+    }
+
+    @SuppressWarnings("deprecation")
+    private static void setLegacyItemLore(@NotNull ItemMeta meta, @NotNull List<Message> lore) {
+        List<String> newLore = new ArrayList<>();
+        for(Message line : lore)
+            newLore.add(line.toString());
+        meta.setLore(newLore);
+    }
+
+    private static void setModernItemLore(@NotNull ItemMeta meta, @NotNull List<Message> lore) {
+        List<Component> newLore = new ArrayList<>();
+        for(Message line : lore)
+            newLore.add(((ModernMessage) line).getMessage());
+        meta.lore(newLore);
+    }
+
     @NotNull
     public static List<Message> getItemLore(@NotNull ItemMeta meta) {
         if(DreamAPI.getServerType().isModern())
