@@ -26,6 +26,8 @@ public class MessageTest {
             DreamAPI.initializeServer();
             Assertions.assertEquals(ServerType.SPIGOT, DreamAPI.getServerType());
 
+            // Test Legacy Messages
+
             try(MockedStatic<PAPIHandler> papiHandler = Mockito.mockStatic(PAPIHandler.class)) {
                 papiHandler.when(() -> PAPIHandler.hasPlaceholders(Mockito.anyString())).thenReturn(false);
                 Message message = Message.fromText("&l<red>Test Message</red>");
@@ -47,11 +49,13 @@ public class MessageTest {
             DreamAPI.initializeServer();
             Assertions.assertEquals(ServerType.PAPER, DreamAPI.getServerType());
 
+            // Test modern messages
+
             try(MockedStatic<PAPIHandler> papiHandler = Mockito.mockStatic(PAPIHandler.class)) {
                 papiHandler.when(() -> PAPIHandler.hasPlaceholders(Mockito.anyString())).thenReturn(false);
                 Message message = Message.fromText("&l<red>Test Message</red>");
                 Assertions.assertTrue(message.getType().isModern());
-                //Assertions.assertEquals("<bold><red>Test Message</red>", message.);
+                Assertions.assertEquals("<bold><red>Test Message</red>", message.toString());
 
                 testGenericMessages(message);
             }
@@ -59,7 +63,10 @@ public class MessageTest {
     }
 
     private void testGenericMessages(Message message) {
+        // Test clone
         Assertions.assertTrue(message.equals(message.clone()));
+
+        // Test Empty messages
 
         Message emptyMessage = Message.fromText("");
         Assertions.assertTrue(emptyMessage.getType().isEmpty());
