@@ -16,22 +16,23 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Message object that uses the Adventure API used in Paper
  */
+@Getter
 public class ModernMessage implements Message {
 
     static final MiniMessage minimessage = MiniMessage.miniMessage();
 
-    @Getter
     private final Component message;
 
-    private final int hashCode;
+    private final String rawMessage;
 
     /**
      * Creates a new message object that uses the Adventure API used in Paper
      * @param message The raw message
      */
     public ModernMessage(@NotNull String message) {
-        this.message = minimessage.deserialize(TextConverter.legacyToModern(message));
-        this.hashCode = message.hashCode();
+        message = TextConverter.legacyToModern(message);
+        this.message = minimessage.deserialize(message);
+        this.rawMessage = message;
     }
 
     @Override
@@ -56,11 +57,11 @@ public class ModernMessage implements Message {
 
     @Override
     public String toString() {
-        return this.message.toString();
+        return this.rawMessage;
     }
 
     @Override
     public int hashCode() {
-        return this.hashCode;
+        return this.rawMessage.hashCode();
     }
 }
