@@ -48,6 +48,16 @@ public class ModernMessage implements Message {
         this.hasPlaceholders = hasPlaceholders;
     }
 
+    /**
+     * Creates a new message object that uses the Adventure API used in Paper
+     * @param component the adventure api component for the message
+     */
+    public ModernMessage(@NotNull Component component) {
+        this.message = component;
+        this.rawMessage = component.toString();
+        this.hasPlaceholders = false;
+    }
+
     @Override
     public MessageType getType() {
         return MessageType.MODERN;
