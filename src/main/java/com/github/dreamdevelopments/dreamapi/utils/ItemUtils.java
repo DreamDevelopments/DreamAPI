@@ -30,8 +30,9 @@ public class ItemUtils {
 
     private static void setModernItemLore(@NotNull ItemMeta meta, @NotNull List<Message> lore) {
         List<Component> newLore = new ArrayList<>();
-        for(Message line : lore)
-            newLore.add(((ModernMessage) line).getMessage());
+        for(Message line : lore) {
+            newLore.add(line.getType().isEmpty() ? Component.empty() : ((ModernMessage) line).getMessage());
+        }
         meta.lore(newLore);
     }
 
