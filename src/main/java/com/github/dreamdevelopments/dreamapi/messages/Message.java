@@ -86,4 +86,13 @@ public interface Message {
     @Override
     int hashCode();
 
+    /**
+     * Check if this message is equal to another message
+     * @param message The message to compare
+     * @return Whether the messages are equal
+     */
+    default boolean equals(Message message) {
+        return message.getType().equals(this.getType()) && message.toString().equals(this.toString());
+    }
+
 }
