@@ -54,7 +54,7 @@ public class ModernMessage implements Message {
      */
     public ModernMessage(@NotNull Component component) {
         this.message = component;
-        this.rawMessage = component.toString();
+        this.rawMessage = minimessage.serialize(component);
         this.hasPlaceholders = false;
     }
 
@@ -94,14 +94,12 @@ public class ModernMessage implements Message {
 
     @Override
     public Message clone() {
-        if(this.hasPlaceholders)
-            return new ModernMessage(this.rawMessage, true);
-        return new ModernMessage(this.message);
+        return new ModernMessage(this.rawMessage, this.hasPlaceholders);
     }
 
     @Override
     public String toString() {
-        return this.message.toString();
+        return this.rawMessage;
     }
 
     @Override
