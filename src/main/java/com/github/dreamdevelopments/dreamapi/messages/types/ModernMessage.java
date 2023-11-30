@@ -1,6 +1,8 @@
 package com.github.dreamdevelopments.dreamapi.messages.types;
 
+import com.github.dreamdevelopments.dreamapi.handlers.PAPIHandler;
 import com.github.dreamdevelopments.dreamapi.messages.Message;
+import com.github.dreamdevelopments.dreamapi.messages.MessageType;
 import com.github.dreamdevelopments.dreamapi.messages.utils.TextConverter;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -15,46 +17,70 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Message object that uses the Adventure API used in Paper
  */
+@Getter
 public class ModernMessage implements Message {
 
     static final MiniMessage minimessage = MiniMessage.miniMessage();
 
-    @Getter
     private final Component message;
 
-    private final int hashCode;
+    private final String rawMessage;
+
+    private final boolean hasPlaceholders;
 
     /**
      * Creates a new message object that uses the Adventure API used in Paper
      * @param message The raw message
      */
     public ModernMessage(@NotNull String message) {
-        this.message = minimessage.deserialize(TextConverter.legacyToModern(message));
-        this.hashCode = message.hashCode();
+        this(message, false);
+    }
+
+    /**
+     * Creates a new message object that uses the Adventure API used in Paper
+     * @param message The raw message
+     * @param hasPlaceholders Whether the message contains placeholders
+     */
+    public ModernMessage(@NotNull String message, boolean hasPlaceholders) {
+        message = TextConverter.legacyToModern(message);
+        this.message = minimessage.deserialize(message);
+        this.rawMessage = message;
+        this.hasPlaceholders = hasPlaceholders;
+    }
+
+    @Override
+    public MessageType getType() {
+        return MessageType.MODERN;
     }
 
     @Override
     public void sendMessage(@NotNull Player player) {
-        player.sendMessage(this.message);
+        player.sendMessage(this.getModifiedMessage(player));
     }
 
     @Override
     public Inventory createInventory(InventoryHolder owner, int size) {
-        return Bukkit.createInventory(owner, size, this.message);
+        return Bukkit.createInventory(owner, size, this.getModifiedMessage((Player)owner));
     }
 
     @Override
     public Inventory createInventory(InventoryHolder owner, InventoryType type) {
-        return Bukkit.createInventory(owner, type, this.message);
+        return Bukkit.createInventory(owner, type, this.getModifiedMessage((Player)owner));
+    }
+
+    private Component getModifiedMessage(Player player) {
+        if(hasPlaceholders)
+            return ModernMessage.minimessage.deserialize(PAPIHandler.replacePlaceholders(this.rawMessage, player));
+        return this.message;
     }
 
     @Override
     public String toString() {
-        return this.message.toString();
+        return this.rawMessage;
     }
 
     @Override
     public int hashCode() {
-        return this.hashCode;
+        return this.rawMessage.hashCode();
     }
 }

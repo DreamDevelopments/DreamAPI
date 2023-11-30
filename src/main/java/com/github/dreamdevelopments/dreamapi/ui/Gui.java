@@ -35,8 +35,7 @@ public abstract class Gui {
 
     public void open(@NotNull Player player) {
         if(this.canOpen(player)) {
-            Inventory inventory = this.guiType.createInventory(player);
-            this.inventory = inventory;
+            this.inventory = this.guiType.createInventory(player);
             if(!this.onOpen(player))
                 return;
             player.openInventory(inventory);

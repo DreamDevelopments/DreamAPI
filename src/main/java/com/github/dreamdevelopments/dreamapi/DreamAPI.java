@@ -3,6 +3,7 @@ package com.github.dreamdevelopments.dreamapi;
 import com.github.dreamdevelopments.dreamapi.configuration.parsers.*;
 import com.github.dreamdevelopments.dreamapi.ui.GuiManager;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class DreamAPI {
@@ -10,9 +11,26 @@ public final class DreamAPI {
     @Getter
     static ServerType serverType;
 
+    @Getter
+    static boolean placeholderAPIEnabled;
+
     public static void initialize(JavaPlugin plugin) {
+        initializeServer();
+        initializeHandlers();
         initializeParsers();
         initializeGui(plugin);
+    }
+
+    public static void initializeServer() {
+        for(ServerType serverType : ServerType.values()) {
+            if(Bukkit.getVersion().toLowerCase().contains(serverType.getName())) {
+                DreamAPI.serverType = serverType;
+            }
+        }
+    }
+
+    public static void initializeHandlers() {
+        placeholderAPIEnabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
     }
 
     public static void initializeParsers() {

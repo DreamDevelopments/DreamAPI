@@ -21,14 +21,24 @@ public interface Message {
      * @return The message object
      */
     static Message fromText(@Nullable String message) {
-        if(message == null)
+        return fromText(message, true);
+    }
+
+    static Message fromText(@Nullable String message, boolean hasPlaceholders) {
+        if(message == null || message.isEmpty())
             return EmptyMessage.getEmptyMessage();
 
         return switch (DreamAPI.getServerType()) {
-            case SPIGOT -> PAPIHandler.hasPlaceholders(message) ? new PlaceholderLegacyMessage(message) : new LegacyMessage(message);
-            case PAPER -> PAPIHandler.hasPlaceholders(message) ? new PlaceholderModernMessage(message) : new ModernMessage(message);
+            case SPIGOT -> new LegacyMessage(message, PAPIHandler.hasPlaceholders(message) && hasPlaceholders);
+            case PAPER -> new ModernMessage(message, PAPIHandler.hasPlaceholders(message) && hasPlaceholders);
         };
     }
+
+    /**
+     * Get the type of this message
+     * @return The message type
+     */
+    MessageType getType();
 
     /**
      * Sends the message to a player
