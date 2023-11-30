@@ -86,10 +86,8 @@ public class ModernMessage implements Message {
 
     @Override
     public Message replaceText(String oldText, String newText) {
-        if(this.hasPlaceholders)
-            return new ModernMessage(this.rawMessage.replace(oldText, newText), true);
-        //TODO: replace text in adventure api component
-        return new ModernMessage(this.message);
+        return new ModernMessage(this.rawMessage.replace(oldText, newText), this.hasPlaceholders);
+
     }
 
     @Override
