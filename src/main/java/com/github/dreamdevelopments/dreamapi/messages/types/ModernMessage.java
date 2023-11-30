@@ -6,6 +6,7 @@ import com.github.dreamdevelopments.dreamapi.messages.MessageType;
 import com.github.dreamdevelopments.dreamapi.messages.utils.TextConverter;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -43,7 +44,7 @@ public class ModernMessage implements Message {
      */
     public ModernMessage(@NotNull String message, boolean hasPlaceholders) {
         message = TextConverter.legacyToModern(message);
-        this.message = minimessage.deserialize(message);
+        this.message = minimessage.deserialize(message).decoration(TextDecoration.ITALIC, false);
         this.rawMessage = message;
         this.hasPlaceholders = hasPlaceholders;
     }
