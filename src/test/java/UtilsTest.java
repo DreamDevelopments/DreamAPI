@@ -1,7 +1,9 @@
 import com.github.dreamdevelopments.dreamapi.messages.utils.TextConverter;
+import com.github.dreamdevelopments.dreamapi.utils.ColorUtils;
 import com.github.dreamdevelopments.dreamapi.utils.FontUtils;
 import com.github.dreamdevelopments.dreamapi.utils.TextUtils;
 
+import org.bukkit.Color;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -42,6 +44,17 @@ public class UtilsTest {
 
         convertedText = TextConverter.modernToLegacy("<red><bold>Test</bold> <red>Message");
         Assertions.assertEquals("&c&lTest &cMessage", convertedText);
+    }
+
+    @Test
+    public void testColorUtils() {
+        Color color = ColorUtils.colorFromHex("#ffabcd");
+        Assertions.assertEquals(255, color.getRed());
+        Assertions.assertEquals(171, color.getGreen());
+        Assertions.assertEquals(205, color.getBlue());
+
+        color = ColorUtils.colorFromHex("#ffffff");
+        Assertions.assertEquals(Color.WHITE, color);
     }
 
 }
