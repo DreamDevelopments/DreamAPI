@@ -26,6 +26,8 @@ public class ItemTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    //TODO: Add test for empty line in lore
+
     @Test @SuppressWarnings("deprecation")
     public void testSpigotItemUtils() {
         try (MockedStatic<Bukkit> bukkit = Mockito.mockStatic(Bukkit.class)) {
