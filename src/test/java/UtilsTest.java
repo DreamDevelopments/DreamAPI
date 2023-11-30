@@ -34,4 +34,14 @@ public class UtilsTest {
         String fontMessage = FontUtils.toSmallCap("Test MessAgE :)");
         Assertions.assertEquals(String.valueOf(new char[]{0x1D1B, 0x1D07, 0x0455, 0x1D1B, ' ', 0x1D0D, 0x1D07, 0x0455, 0x0455, 0x1D00, 0x0262, 0x1D07, ' ', ':', ')'}), fontMessage);
     }
+
+    @Test
+    public void testTextConvertor() {
+        String convertedText = TextConverter.legacyToModern("&c&lTest &r&cMessage");
+        Assertions.assertEquals("<red><bold>Test <reset><red>Message", convertedText);
+
+        convertedText = TextConverter.modernToLegacy("<red><bold>Test</bold> <red>Message");
+        Assertions.assertEquals("&c&lTest &cMessage", convertedText);
+    }
+
 }
