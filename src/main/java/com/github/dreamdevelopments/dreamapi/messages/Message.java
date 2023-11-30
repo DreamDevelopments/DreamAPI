@@ -29,8 +29,8 @@ public interface Message {
             return EmptyMessage.getEmptyMessage();
 
         return switch (DreamAPI.getServerType()) {
-            case SPIGOT -> new LegacyMessage(message, PAPIHandler.hasPlaceholders(message) && hasPlaceholders);
-            case PAPER -> new ModernMessage(message, PAPIHandler.hasPlaceholders(message) && hasPlaceholders);
+            case SPIGOT -> new LegacyMessage(message, hasPlaceholders && PAPIHandler.hasPlaceholders(message));
+            case PAPER -> new ModernMessage(message, hasPlaceholders && PAPIHandler.hasPlaceholders(message));
         };
     }
 
