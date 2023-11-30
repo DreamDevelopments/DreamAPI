@@ -101,7 +101,7 @@ public class ModernMessage implements Message {
 
     @Override
     public String toString() {
-        return this.rawMessage;
+        return this.message.toString();
     }
 
     @Override
