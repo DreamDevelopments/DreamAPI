@@ -40,4 +40,27 @@ public class MessageTest {
 
         }
     }
+
+    @Test
+    public void testPaperMessages() {
+        try(MockedStatic<Bukkit> bukkit = Mockito.mockStatic(Bukkit.class)) {
+            bukkit.when(Bukkit::getVersion).thenReturn("Paper 1.20.1");
+            DreamAPI.initializeServer();
+            Assertions.assertEquals(ServerType.PAPER, DreamAPI.getServerType());
+
+            try(MockedStatic<PAPIHandler> papiHandler = Mockito.mockStatic(PAPIHandler.class)) {
+                papiHandler.when(() -> PAPIHandler.hasPlaceholders(Mockito.anyString())).thenReturn(false);
+                Message message = Message.fromText("&l<red>Test Message</red>");
+                Assertions.assertTrue(message.getType().isModern());
+                Assertions.assertEquals("<bold><red>Test Message</red>", message.toString());
+
+                message = Message.fromText(null);
+                Assertions.assertTrue(message.getType().isEmpty());
+
+                message = Message.fromText("");
+                Assertions.assertTrue(message.getType().isEmpty());
+            }
+        }
+    }
+
 }
