@@ -61,6 +61,11 @@ public class LegacyMessage implements Message {
     }
 
     @Override
+    public Message replaceText(String oldText, String newText) {
+        return new LegacyMessage(this.message.replace(oldText, newText), this.hasPlaceholders);
+    }
+
+    @Override
     public Message clone() {
         return new LegacyMessage(this.message, this.hasPlaceholders);
     }

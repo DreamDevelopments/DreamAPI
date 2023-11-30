@@ -63,6 +63,14 @@ public interface Message {
     Inventory createInventory(InventoryHolder owner, InventoryType type);
 
     /**
+     * Replace all occurrences of a string with another string
+     * @param oldText The string to replace
+     * @param newText The string to replace with
+     * @return A copy of the message with the string replaced
+     */
+    Message replaceText(String oldText, String newText);
+
+    /**
      * Clone this message
      * @return Returns an exact copy of this message
      */

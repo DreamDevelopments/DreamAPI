@@ -37,6 +37,11 @@ public final class EmptyMessage implements Message {
     }
 
     @Override
+    public Message replaceText(String oldText, String newText) {
+        return this;
+    }
+
+    @Override
     public Message clone() {
         return this;
     }
