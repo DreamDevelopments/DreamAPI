@@ -10,6 +10,7 @@ import java.util.Map;
 public class TextConverter {
 
     private final static HashMap<String, String> legacyToModern;
+    private final static String[] endTags;
 
     static {
         legacyToModern = new HashMap<>();
@@ -35,6 +36,12 @@ public class TextConverter {
         legacyToModern.put("&n", "<underline>");
         legacyToModern.put("&o", "<italic>");
         legacyToModern.put("&r", "<reset>");
+
+        endTags = new String[]{
+                "</black>", "</dark_blue>", "</dark_green>", "</dark_aqua>", "</dark_red>", "</dark_purple>", "</gold>",
+                "</gray>", "</dark_gray>", "</blue>", "</green>", "</aqua>", "</red>", "</light_purple>", "</yellow>", "</white>",
+                "</obfuscated>", "</bold>", "</strikethrough>", "</underline>", "</italic>", "</reset>"
+        };
     }
 
     /**
@@ -57,6 +64,9 @@ public class TextConverter {
     public static String modernToLegacy(String message) {
         for(Map.Entry<String, String> pair : legacyToModern.entrySet()) {
             message = message.replace(pair.getValue(), pair.getKey());
+        }
+        for(String endTag : endTags) {
+            message = message.replace(endTag, "");
         }
         return message;
     }
