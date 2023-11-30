@@ -18,4 +18,26 @@ public class MessageTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    @Test @SuppressWarnings("deprecation")
+    public void testSpigotMessages() {
+        try(MockedStatic<Bukkit> bukkit = Mockito.mockStatic(Bukkit.class)) {
+            bukkit.when(Bukkit::getVersion).thenReturn("Spigot 1.20.1");
+            DreamAPI.initializeServer();
+            Assertions.assertEquals(ServerType.SPIGOT, DreamAPI.getServerType());
+
+            try(MockedStatic<PAPIHandler> papiHandler = Mockito.mockStatic(PAPIHandler.class)) {
+                papiHandler.when(() -> PAPIHandler.hasPlaceholders(Mockito.anyString())).thenReturn(false);
+                Message message = Message.fromText("&l<red>Test Message</red>");
+                Assertions.assertTrue(message.getType().isLegacy());
+                Assertions.assertEquals(ChatColor.BOLD + "" + ChatColor.RED + "Test Message", message.toString());
+
+                message = Message.fromText(null);
+                Assertions.assertTrue(message.getType().isEmpty());
+
+                message = Message.fromText("");
+                Assertions.assertTrue(message.getType().isEmpty());
+            }
+
+        }
+    }
 }
