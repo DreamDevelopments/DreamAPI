@@ -81,9 +81,15 @@ public class LegacyMessage implements Message {
         return this.message;
     }
 
+
     @Override
     public int hashCode() {
         return this.message.hashCode();
+    }
+
+    @Override
+    public boolean equals(Message message) {
+        return message.getType().equals(this.getType()) && message.toString().equals(this.toString());
     }
 
 }

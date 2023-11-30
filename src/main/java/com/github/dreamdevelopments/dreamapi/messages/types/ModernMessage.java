@@ -106,4 +106,9 @@ public class ModernMessage implements Message {
     public int hashCode() {
         return this.rawMessage.hashCode();
     }
+
+    @Override
+    public boolean equals(Message message) {
+        return message.getType().equals(this.getType()) && ((ModernMessage)message).getMessage().equals(this.getMessage());
+    }
 }

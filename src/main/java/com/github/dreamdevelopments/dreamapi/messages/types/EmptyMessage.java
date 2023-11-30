@@ -50,4 +50,9 @@ public final class EmptyMessage implements Message {
     public String toString() {
         return "";
     }
+
+    @Override
+    public boolean equals(Message message) {
+        return message.getType().equals(this.getType());
+    }
 }
