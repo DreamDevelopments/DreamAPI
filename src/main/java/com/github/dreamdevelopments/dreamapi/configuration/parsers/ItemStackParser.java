@@ -3,7 +3,6 @@ package com.github.dreamdevelopments.dreamapi.configuration.parsers;
 import com.github.dreamdevelopments.dreamapi.configuration.Config;
 import com.github.dreamdevelopments.dreamapi.utils.ColorUtils;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -65,7 +64,6 @@ public final class ItemStackParser extends Parser<ItemStack> {
             for (String enchantString : config.getConfigurationSection(path + ".enchants").getKeys(false)) {
                 Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft(enchantString.toLowerCase()));
                 if (enchantment == null) {
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[CandyMinesRobots] There was an error while loading a config. There is no enchantment called: " + enchantString);
                     continue;
                 }
                 int enchantmentLevel = config.getInt(path + ".enchants." + enchantString);
