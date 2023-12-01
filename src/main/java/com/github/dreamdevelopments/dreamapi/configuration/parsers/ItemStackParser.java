@@ -72,8 +72,8 @@ public final class ItemStackParser extends Parser<ItemStack> {
                 itemMeta.addEnchant(enchantment, enchantmentLevel, true);
             }
         }
-        if (config.contains(path + ".customModelData")) {
-            itemMeta.setCustomModelData(config.getInt(path + ".customModelData"));
+        if (config.contains(path + ".custom_model_data")) {
+            itemMeta.setCustomModelData(config.getInt(path + ".custom_model_data"));
         }
 
         if (material.equals(Material.PLAYER_HEAD)) {
