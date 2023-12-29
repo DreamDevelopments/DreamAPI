@@ -5,6 +5,7 @@ import com.github.dreamdevelopments.dreamapi.effects.CustomSound;
 import com.github.dreamdevelopments.dreamapi.messages.Message;
 import com.github.dreamdevelopments.dreamapi.ui.GuiType;
 import com.github.dreamdevelopments.dreamapi.ui.elements.GuiItem;
+import com.github.dreamdevelopments.dreamapi.utils.ReflectionUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -63,7 +64,7 @@ public abstract class Config extends YamlConfiguration{
         }
 
         try {
-            for (Field field : this.getClass().getDeclaredFields()) {
+            for (Field field : ReflectionUtils.getAllFields(this.getClass())) {
                 ConfigValue annotation = field.getAnnotation(ConfigValue.class);
                 if (annotation != null) {
                     field.setAccessible(true);
