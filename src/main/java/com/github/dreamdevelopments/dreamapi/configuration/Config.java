@@ -19,11 +19,11 @@ import java.lang.reflect.Field;
 
 public abstract class Config extends YamlConfiguration{
 
-    private final JavaPlugin plugin;
+    protected final JavaPlugin plugin;
 
     @Getter
     private final String fileName;
-    private final File configFile;
+    protected final File configFile;
 
     public Config(JavaPlugin plugin, String fileName) {
         super();
