@@ -54,6 +54,10 @@ public abstract class Config extends YamlConfiguration{
         }
         try {
             super.load(this.configFile);
+            InputStream defaultInputStream = this.plugin.getResource(this.fileName);
+            if(defaultInputStream != null) {
+                super.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defaultInputStream)));
+            }
         } catch (IOException | InvalidConfigurationException error) {
             error.printStackTrace();
         }
