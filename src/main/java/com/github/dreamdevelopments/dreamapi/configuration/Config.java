@@ -5,7 +5,9 @@ import com.github.dreamdevelopments.dreamapi.effects.CustomSound;
 import com.github.dreamdevelopments.dreamapi.messages.Message;
 import com.github.dreamdevelopments.dreamapi.ui.GuiType;
 import com.github.dreamdevelopments.dreamapi.ui.elements.GuiItem;
+import com.github.dreamdevelopments.dreamapi.utils.ReflectionUtils;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +18,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 
 public abstract class Config extends YamlConfiguration{
@@ -51,12 +55,16 @@ public abstract class Config extends YamlConfiguration{
         }
         try {
             super.load(this.configFile);
+            InputStream defaultInputStream = this.plugin.getResource(this.fileName);
+            if(defaultInputStream != null) {
+                super.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defaultInputStream)));
+            }
         } catch (IOException | InvalidConfigurationException error) {
             error.printStackTrace();
         }
 
         try {
-            for (Field field : this.getClass().getDeclaredFields()) {
+            for (Field field : ReflectionUtils.getAllFields(this.getClass())) {
                 ConfigValue annotation = field.getAnnotation(ConfigValue.class);
                 if (annotation != null) {
                     field.setAccessible(true);
@@ -99,7 +107,6 @@ public abstract class Config extends YamlConfiguration{
     }
 
     public int[] getSlotList(@NotNull String path) {
-        path = this.defaultPath + path;
         if(this.isInt(path))
             return new int[]{this.getInt(path)};
         return this.getIntegerList(path).stream().mapToInt(Integer::intValue).toArray();
@@ -109,7 +116,21 @@ public abstract class Config extends YamlConfiguration{
     @Contract("_, !null -> !null")
     @Nullable
     public Object get(@NotNull String path, @Nullable Object def) {
-        return super.get(this.defaultPath + path, def);
+        return super.get(this.getPath(path), def);
+    }
+
+    @Override
+    @Nullable
+    protected Object getDefault(@NotNull String path) {
+        return super.getDefault(this.getPath(path));
+    }
+
+    private String getPath(String path) {
+        String[] pathLocations = path.split(String.valueOf(this.getRoot().options().pathSeparator()));
+        String root = pathLocations.length > 0 ? pathLocations[0] : path;
+        if(root.equals(this.defaultPath))
+            return path;
+        return this.defaultPath + "." + path;
     }
 
 }
