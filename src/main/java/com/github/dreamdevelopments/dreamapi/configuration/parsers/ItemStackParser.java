@@ -36,7 +36,7 @@ public final class ItemStackParser extends Parser<ItemStack> {
         if (!config.contains(path))
             return null;
         Material material = Material.STONE;
-        String rawMaterial = Objects.requireNonNull(config.getString(path + ".material");
+        String rawMaterial = Objects.requireNonNull(config.getString(path + ".material"));
         try {
             material = Material.valueOf(rawMaterial.toUpperCase());
         } catch (IllegalArgumentException e) {
