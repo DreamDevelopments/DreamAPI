@@ -14,6 +14,11 @@ import java.util.List;
 
 public class ItemUtils {
 
+    /**
+     * Set a Message as the name of an item
+     * @param meta The ItemMeta of the item
+     * @param name The message to set as the name
+     */
     @SuppressWarnings("deprecation")
     public static void setItemName(@NotNull ItemMeta meta, @NotNull Message name) {
         if(name.getType().isEmpty())
@@ -25,6 +30,11 @@ public class ItemUtils {
             meta.setDisplayName(name.toString());
     }
 
+    /**
+     * Get the name of an item as a Message
+     * @param meta The ItemMeta of the item
+     * @return The name of the item
+     */
     @NotNull @SuppressWarnings("deprecation")
     public static Message getItemName(@NotNull ItemMeta meta) {
         if(DreamAPI.getServerType().isModern()) {
@@ -39,6 +49,11 @@ public class ItemUtils {
         }
     }
 
+    /**
+     * Set a list of Messages as the lore of an item
+     * @param meta The ItemMeta of the item
+     * @param lore The lore to set
+     */
     public static void setItemLore(@NotNull ItemMeta meta, @NotNull List<Message> lore) {
         if(DreamAPI.getServerType().isModern())
             setModernItemLore(meta, lore);
@@ -62,6 +77,11 @@ public class ItemUtils {
         meta.lore(newLore);
     }
 
+    /**
+     * Get the lore of an item as a list of Messages
+     * @param meta The ItemMeta of the item
+     * @return The lore of the item
+     */
     @NotNull
     public static List<Message> getItemLore(@NotNull ItemMeta meta) {
         if(DreamAPI.getServerType().isModern())

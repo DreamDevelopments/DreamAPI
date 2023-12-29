@@ -18,6 +18,12 @@ public class FontUtils {
             normalToSmallCap.put(normalAlphabet[i], smallCapAlphabet[i]);
         }
     }
+
+    /**
+     * Convert a string to small capital letters using unicode characters
+     * @param string The string to convert
+     * @return The converted string
+     */
     public static String toSmallCap(String string) {
         char[] newString = string.toLowerCase().toCharArray();
         for(int i = 0; i < newString.length; i++)

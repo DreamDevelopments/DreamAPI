@@ -19,6 +19,11 @@ public class TextUtils {
         return newString.toString();
     }
 
+    /**
+     * Formats a time in seconds to a string
+     * @param seconds The time in seconds
+     * @return The formatted time (mm:ss)
+     */
     @NotNull
     public static String formatTime(int seconds) {
         int minutes = seconds/60;
@@ -29,6 +34,11 @@ public class TextUtils {
     private static final String[] romanNumerals = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
     private static final int[] romanNumeralsValues = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
 
+    /**
+     * Converts a number to a roman numeral
+     * @param number The number to convert
+     * @return The roman numeral
+     */
     @NotNull
     public static String romanNumeral(int number) {
         if(number <= 0)

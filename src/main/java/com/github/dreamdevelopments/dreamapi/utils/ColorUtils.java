@@ -5,6 +5,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class ColorUtils {
 
+    /**
+     * Converts a hex string to a color
+     * @param hex The hex string (#RRGGBB)
+     * @return The color
+     */
     @NotNull
     public static Color colorFromHex(@NotNull String hex) {
         return Color.fromRGB(
