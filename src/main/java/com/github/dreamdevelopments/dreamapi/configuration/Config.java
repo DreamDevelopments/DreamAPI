@@ -6,6 +6,7 @@ import com.github.dreamdevelopments.dreamapi.messages.Message;
 import com.github.dreamdevelopments.dreamapi.ui.GuiType;
 import com.github.dreamdevelopments.dreamapi.ui.elements.GuiItem;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +17,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 
 public abstract class Config extends YamlConfiguration{
@@ -62,9 +65,9 @@ public abstract class Config extends YamlConfiguration{
                     field.setAccessible(true);
                     Class<?> fieldType = field.getType();
                     if(Parser.exists(fieldType))
-                        field.set(this, Parser.getParser(fieldType).loadFromConfig(this, this.defaultPath + annotation.value()));
+                        field.set(this, Parser.getParser(fieldType).loadFromConfig(this, annotation.value()));
                     else
-                        field.set(this, this.get(this.defaultPath + annotation.value()));
+                        field.set(this, this.get(annotation.value()));
                 }
             }
         } catch (IllegalAccessException error) {
@@ -75,31 +78,30 @@ public abstract class Config extends YamlConfiguration{
 
     @Nullable
     public ItemStack getItemStack(@NotNull String path) {
-        return ItemStackParser.getInstance().loadFromConfig(this, this.defaultPath + path);
+        return ItemStackParser.getInstance().loadFromConfig(this, path);
     }
 
     @NotNull
     public CustomSound getCustomSound(@NotNull String path) {
-        return CustomSoundParser.getInstance().loadFromConfig(this, this.defaultPath + path);
+        return CustomSoundParser.getInstance().loadFromConfig(this, path);
     }
 
     @NotNull
     public GuiItem getGuiItem(@NotNull String path) {
-        return GuiItemParser.getInstance().loadFromConfig(this, this.defaultPath + path);
+        return GuiItemParser.getInstance().loadFromConfig(this, path);
     }
 
     @NotNull
     public GuiType getGuiType(@NotNull String path) {
-        return GuiTypeParser.getInstance().loadFromConfig(this, this.defaultPath + path);
+        return GuiTypeParser.getInstance().loadFromConfig(this, path);
     }
     
     @NotNull
     public Message getMessage(@NotNull String path) {
-        return Message.fromText(this.getString(this.defaultPath + path));
+        return Message.fromText(this.getString(path));
     }
 
     public int[] getSlotList(@NotNull String path) {
-        path = this.defaultPath + path;
         if(this.isInt(path))
             return new int[]{this.getInt(path)};
         return this.getIntegerList(path).stream().mapToInt(Integer::intValue).toArray();
@@ -109,7 +111,21 @@ public abstract class Config extends YamlConfiguration{
     @Contract("_, !null -> !null")
     @Nullable
     public Object get(@NotNull String path, @Nullable Object def) {
-        return super.get(this.defaultPath + path, def);
+        return super.get(this.getPath(path), def);
+    }
+
+    @Override
+    @Nullable
+    protected Object getDefault(@NotNull String path) {
+        return super.getDefault(this.getPath(path));
+    }
+
+    private String getPath(String path) {
+        String[] pathLocations = path.split(String.valueOf(this.getRoot().options().pathSeparator()));
+        String root = pathLocations.length > 0 ? pathLocations[0] : path;
+        if(root.equals(this.defaultPath))
+            return path;
+        return this.defaultPath + "." + path;
     }
 
 }
