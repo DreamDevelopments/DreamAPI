@@ -97,7 +97,7 @@ public abstract class Config extends YamlConfiguration{
         return Message.fromText(this.getString(this.defaultPath + path));
     }
 
-    public int[] getSlotList(String path) {
+    public int[] getSlotList(@NotNull String path) {
         path = this.defaultPath + path;
         if(this.isInt(path))
             return new int[]{this.getInt(path)};
