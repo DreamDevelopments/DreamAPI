@@ -31,10 +31,11 @@ public final class ItemStackParser extends Parser<ItemStack> {
         if (!config.contains(path))
             return null;
         Material material = Material.STONE;
+        String rawMaterial = Objects.requireNonNull(config.getString(path + ".material");
         try {
-            material = Material.valueOf(Objects.requireNonNull(config.getString(path + ".material")).toUpperCase());
+            material = Material.valueOf(rawMaterial.toUpperCase());
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            config.getPlugin().getLogger().warning(String.format("Invalid material %s in %s/%s", rawMaterial, config.getPlugin().getName(), config.getFileName()));
         }
 
         ItemStack item = new ItemStack(material);
