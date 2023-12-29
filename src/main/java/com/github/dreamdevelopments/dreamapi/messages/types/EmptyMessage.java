@@ -4,6 +4,7 @@ import com.github.dreamdevelopments.dreamapi.messages.Message;
 import com.github.dreamdevelopments.dreamapi.messages.MessageType;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -24,7 +25,10 @@ public final class EmptyMessage implements Message {
     }
 
     @Override
-    public void sendMessage(@NotNull Player player) {}
+    public void sendMessage(@NotNull CommandSender receiver) {}
+
+    @Override
+    public void sendActionbar(@NotNull Player player) {}
 
     @Override
     public Inventory createInventory(InventoryHolder owner, int size) {

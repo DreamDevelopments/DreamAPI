@@ -3,6 +3,7 @@ package com.github.dreamdevelopments.dreamapi.messages;
 import com.github.dreamdevelopments.dreamapi.DreamAPI;
 import com.github.dreamdevelopments.dreamapi.messages.types.*;
 import com.github.dreamdevelopments.dreamapi.handlers.PAPIHandler;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -29,8 +30,8 @@ public interface Message {
             return EmptyMessage.getEmptyMessage();
 
         return switch (DreamAPI.getServerType()) {
-            case SPIGOT -> new LegacyMessage(message, PAPIHandler.hasPlaceholders(message) && hasPlaceholders);
-            case PAPER -> new ModernMessage(message, PAPIHandler.hasPlaceholders(message) && hasPlaceholders);
+            case SPIGOT -> new LegacyMessage(message, hasPlaceholders && PAPIHandler.hasPlaceholders(message));
+            case PAPER -> new ModernMessage(message, hasPlaceholders && PAPIHandler.hasPlaceholders(message));
         };
     }
 
@@ -42,9 +43,15 @@ public interface Message {
 
     /**
      * Sends the message to a player
+     * @param receiver The receiver of the message
+     */
+    void sendMessage(@NotNull CommandSender receiver);
+
+    /**
+     * Sends the message in the actionbar to a player
      * @param player The player that receives the message
      */
-    void sendMessage(@NotNull Player player);
+    void sendActionbar(@NotNull Player player);
 
     /**
      * Creates a custom player inventory with this message as the title

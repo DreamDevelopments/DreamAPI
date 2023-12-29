@@ -65,7 +65,7 @@ public class MessageTest {
                 Assertions.assertTrue(message.getType().isModern());
                 Assertions.assertEquals("<bold><red>Test Message</red>", message.toString());
 
-                Message componentMessage = new ModernMessage(MiniMessage.miniMessage().deserialize("<bold><red>Test Message</red>"));
+                Message componentMessage = new ModernMessage(MiniMessage.miniMessage().deserialize("<italic:false><bold><red>Test Message</red>"));
                 Assertions.assertTrue(message.equals(componentMessage));
 
                 // Test replace text

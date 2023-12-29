@@ -10,6 +10,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,16 +20,25 @@ import java.lang.reflect.Field;
 
 public abstract class Config extends YamlConfiguration{
 
-    private final JavaPlugin plugin;
+    @Getter
+    protected final JavaPlugin plugin;
 
     @Getter
     private final String fileName;
-    private final File configFile;
+    protected final File configFile;
+
+    @Getter
+    private final String defaultPath;
 
     public Config(JavaPlugin plugin, String fileName) {
+        this(plugin, fileName, "");
+    }
+
+    public Config(JavaPlugin plugin, String fileName, String defaultPath) {
         super();
         this.plugin = plugin;
         this.fileName = fileName;
+        this.defaultPath = defaultPath;
         this.configFile = new File(plugin.getDataFolder() + File.separator + fileName);
         this.load();
     }
@@ -52,9 +62,9 @@ public abstract class Config extends YamlConfiguration{
                     field.setAccessible(true);
                     Class<?> fieldType = field.getType();
                     if(Parser.exists(fieldType))
-                        field.set(this, Parser.getParser(fieldType).loadFromConfig(this, annotation.value()));
+                        field.set(this, Parser.getParser(fieldType).loadFromConfig(this, this.defaultPath + annotation.value()));
                     else
-                        field.set(this, this.get(annotation.value()));
+                        field.set(this, this.get(this.defaultPath + annotation.value()));
                 }
             }
         } catch (IllegalAccessException error) {
@@ -65,33 +75,41 @@ public abstract class Config extends YamlConfiguration{
 
     @Nullable
     public ItemStack getItemStack(@NotNull String path) {
-        return ItemStackParser.getInstance().loadFromConfig(this, path);
+        return ItemStackParser.getInstance().loadFromConfig(this, this.defaultPath + path);
     }
 
     @NotNull
     public CustomSound getCustomSound(@NotNull String path) {
-        return CustomSoundParser.getInstance().loadFromConfig(this, path);
+        return CustomSoundParser.getInstance().loadFromConfig(this, this.defaultPath + path);
     }
 
     @NotNull
     public GuiItem getGuiItem(@NotNull String path) {
-        return GuiItemParser.getInstance().loadFromConfig(this, path);
+        return GuiItemParser.getInstance().loadFromConfig(this, this.defaultPath + path);
     }
 
     @NotNull
     public GuiType getGuiType(@NotNull String path) {
-        return GuiTypeParser.getInstance().loadFromConfig(this, path);
+        return GuiTypeParser.getInstance().loadFromConfig(this, this.defaultPath + path);
     }
     
     @NotNull
     public Message getMessage(@NotNull String path) {
-        return Message.fromText(this.getString(path));
+        return Message.fromText(this.getString(this.defaultPath + path));
     }
 
-    public int[] getSlotList(String path) {
+    public int[] getSlotList(@NotNull String path) {
+        path = this.defaultPath + path;
         if(this.isInt(path))
             return new int[]{this.getInt(path)};
         return this.getIntegerList(path).stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    @Override
+    @Contract("_, !null -> !null")
+    @Nullable
+    public Object get(@NotNull String path, @Nullable Object def) {
+        return super.get(this.defaultPath + path, def);
     }
 
 }

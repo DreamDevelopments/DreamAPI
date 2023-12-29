@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 public abstract class Gui {
 
-    private Inventory inventory;
+    protected Inventory inventory;
     private final GuiType guiType;
 
     public Gui(GuiType guiType) {

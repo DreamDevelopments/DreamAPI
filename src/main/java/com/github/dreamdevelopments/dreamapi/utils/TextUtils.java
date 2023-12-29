@@ -1,5 +1,6 @@
 package com.github.dreamdevelopments.dreamapi.utils;
 
+import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class TextUtils {
@@ -19,6 +20,25 @@ public class TextUtils {
         int minutes = seconds/60;
         seconds = seconds%60;
         return (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+    }
+
+    private static final String[] romanNumerals = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+    private static final int[] romanNumeralsValues = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+
+    @NotNull
+    public static String romanNumeral(int number) {
+        if(number <= 0)
+            throw new IllegalArgumentException("Number has to be higher than 0");
+        StringBuilder roman = new StringBuilder();
+        for (int i = 0; i < romanNumeralsValues.length; i++) {
+            int times = number / romanNumeralsValues[i];
+            number %= romanNumeralsValues[i];
+
+            for (int j = 0; j < times; j++) {
+                roman.append(romanNumerals[i]);
+            }
+        }
+        return roman.toString();
     }
 
 }

@@ -12,8 +12,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,10 +36,11 @@ public final class ItemStackParser extends Parser<ItemStack> {
         if (!config.contains(path))
             return null;
         Material material = Material.STONE;
+        String rawMaterial = Objects.requireNonNull(config.getString(path + ".material"));
         try {
-            material = Material.valueOf(Objects.requireNonNull(config.getString(path + ".material")).toUpperCase());
+            material = Material.valueOf(rawMaterial.toUpperCase());
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            config.getPlugin().getLogger().warning(String.format("Invalid material %s in %s/%s", rawMaterial, config.getPlugin().getName(), config.getFileName()));
         }
 
         ItemStack item = new ItemStack(material);
@@ -44,6 +49,8 @@ public final class ItemStackParser extends Parser<ItemStack> {
 
         ItemMeta itemMeta = item.getItemMeta();
         assert itemMeta != null;
+
+        //TODO: Add support for MiniMessages
 
         if (config.contains(path + ".name")) {
             itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(config.getString(path + ".name"))));
@@ -65,34 +72,36 @@ public final class ItemStackParser extends Parser<ItemStack> {
             for (String enchantString : config.getConfigurationSection(path + ".enchants").getKeys(false)) {
                 Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft(enchantString.toLowerCase()));
                 if (enchantment == null) {
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[CandyMinesRobots] There was an error while loading a config. There is no enchantment called: " + enchantString);
                     continue;
                 }
                 int enchantmentLevel = config.getInt(path + ".enchants." + enchantString);
                 itemMeta.addEnchant(enchantment, enchantmentLevel, true);
             }
         }
-        if (config.contains(path + ".customModelData")) {
-            itemMeta.setCustomModelData(config.getInt(path + ".customModelData"));
+        if (config.contains(path + ".custom_model_data")) {
+            itemMeta.setCustomModelData(config.getInt(path + ".custom_model_data"));
         }
 
         if (material.equals(Material.PLAYER_HEAD)) {
             SkullMeta skullMeta = (SkullMeta) itemMeta;
-/*            if(this.getConfig().contains(path + ".owner")) {
-                PlayerProfile profile = Bukkit.getServer().createPlayerProfile(this.getConfig().getString(path + ".owner"));
+            if(config.contains(path + ".owner")) {
+                PlayerProfile profile = Bukkit.getServer().createPlayerProfile(config.getString(path + ".owner"));
                 skullMeta.setOwnerProfile(profile);
             }
-            else if(this.getConfig().contains(path + ".texture")){
-                GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);
-                gameProfile.getProperties().put("textures", new Property("textures", this.getConfig().getString(path + ".texture")));
+            else if(config.contains(path + ".texture")){
+                PlayerProfile profile = Bukkit.getServer().createPlayerProfile("CustomHead");
+                PlayerTextures textures = profile.getTextures();
+                URL url;
                 try {
-                    Field profileField = skullMeta.getClass().getDeclaredField("profile");
-                    profileField.setAccessible(true);
-                    profileField.set(skullMeta, gameProfile);
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    e.printStackTrace();
+                    textures.setSkin(new URL(Objects.requireNonNull(config.getString(path + ".texture"))));
+                    skullMeta.setOwnerProfile(profile);
+                } catch (MalformedURLException e) {
+                    config.getPlugin().getLogger().warning(
+                            String.format("Invalid texture url \"%s\" in %s/%s. The texture url must start with \"http://textures.minecraft.net/texture/\".",
+                                    rawMaterial, config.getPlugin().getName(), config.getFileName())
+                    );
                 }
-            }*/
+            }
         }
         item.setItemMeta(itemMeta);
         return item;

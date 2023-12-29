@@ -6,8 +6,10 @@ import com.github.dreamdevelopments.dreamapi.messages.MessageType;
 import com.github.dreamdevelopments.dreamapi.messages.utils.TextConverter;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -43,7 +45,7 @@ public class ModernMessage implements Message {
      */
     public ModernMessage(@NotNull String message, boolean hasPlaceholders) {
         message = TextConverter.legacyToModern(message);
-        this.message = minimessage.deserialize(message);
+        this.message = minimessage.deserialize(message).decoration(TextDecoration.ITALIC, false);
         this.rawMessage = message;
         this.hasPlaceholders = hasPlaceholders;
     }
@@ -64,8 +66,16 @@ public class ModernMessage implements Message {
     }
 
     @Override
-    public void sendMessage(@NotNull Player player) {
-        player.sendMessage(this.getModifiedMessage(player));
+    public void sendMessage(@NotNull CommandSender receiver) {
+        if(receiver instanceof Player player)
+            receiver.sendMessage(this.getModifiedMessage(player));
+        else
+            receiver.sendMessage(this.getMessage());
+    }
+
+    @Override
+    public void sendActionbar(@NotNull Player player) {
+        player.sendActionBar(this.getModifiedMessage(player));
     }
 
     @Override

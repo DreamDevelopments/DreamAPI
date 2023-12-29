@@ -6,7 +6,10 @@ import com.github.dreamdevelopments.dreamapi.messages.MessageType;
 import com.github.dreamdevelopments.dreamapi.messages.utils.LegacyText;
 import com.github.dreamdevelopments.dreamapi.messages.utils.TextConverter;
 import lombok.Getter;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -46,8 +49,16 @@ public class LegacyMessage implements Message {
     }
 
     @Override
-    public void sendMessage(@NotNull Player player) {
-        player.sendMessage(this.getModifiedMessage(player));
+    public void sendMessage(@NotNull CommandSender receiver) {
+        if(receiver instanceof Player player)
+            receiver.sendMessage(this.getModifiedMessage(player));
+        else
+            receiver.sendMessage(this.getMessage());
+    }
+
+    @Override
+    public void sendActionbar(@NotNull Player player) {
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(this.message));
     }
 
     @Override

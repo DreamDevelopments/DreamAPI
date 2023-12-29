@@ -2,6 +2,7 @@ package com.github.dreamdevelopments.dreamapi.utils;
 
 import com.github.dreamdevelopments.dreamapi.DreamAPI;
 import com.github.dreamdevelopments.dreamapi.messages.Message;
+import com.github.dreamdevelopments.dreamapi.messages.types.EmptyMessage;
 import com.github.dreamdevelopments.dreamapi.messages.types.LegacyMessage;
 import com.github.dreamdevelopments.dreamapi.messages.types.ModernMessage;
 import net.kyori.adventure.text.Component;
@@ -12,6 +13,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemUtils {
+
+    @SuppressWarnings("deprecation")
+    public static void setItemName(@NotNull ItemMeta meta, @NotNull Message name) {
+        if(name.getType().isEmpty())
+            meta.setDisplayName("");
+        if(DreamAPI.getServerType().isModern()) {
+            meta.displayName(((ModernMessage) name).getMessage());
+        }
+        else
+            meta.setDisplayName(name.toString());
+    }
+
+    @NotNull @SuppressWarnings("deprecation")
+    public static Message getItemName(@NotNull ItemMeta meta) {
+        if(DreamAPI.getServerType().isModern()) {
+            Component name = meta.displayName();
+            if(name == null)
+                return EmptyMessage.getEmptyMessage();
+            return new ModernMessage(name);
+        }
+        else {
+            String name = meta.getDisplayName();
+            return Message.fromText(name);
+        }
+    }
 
     public static void setItemLore(@NotNull ItemMeta meta, @NotNull List<Message> lore) {
         if(DreamAPI.getServerType().isModern())
@@ -30,8 +56,9 @@ public class ItemUtils {
 
     private static void setModernItemLore(@NotNull ItemMeta meta, @NotNull List<Message> lore) {
         List<Component> newLore = new ArrayList<>();
-        for(Message line : lore)
-            newLore.add(((ModernMessage) line).getMessage());
+        for(Message line : lore) {
+            newLore.add(line.getType().isEmpty() ? Component.empty() : ((ModernMessage) line).getMessage());
+        }
         meta.lore(newLore);
     }
 

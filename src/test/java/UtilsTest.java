@@ -57,4 +57,13 @@ public class UtilsTest {
         Assertions.assertEquals(Color.WHITE, color);
     }
 
+    @Test
+    public void testRomanNumerals() {
+        Assertions.assertEquals("V", TextUtils.romanNumeral(5));
+        Assertions.assertEquals("IV", TextUtils.romanNumeral(4));
+        Assertions.assertEquals("VI", TextUtils.romanNumeral(6));
+        Assertions.assertEquals("II", TextUtils.romanNumeral(2));
+        Assertions.assertEquals("XI", TextUtils.romanNumeral(11));
+    }
+
 }
