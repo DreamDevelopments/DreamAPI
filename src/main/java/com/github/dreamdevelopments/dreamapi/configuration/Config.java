@@ -70,9 +70,9 @@ public abstract class Config extends YamlConfiguration{
                     field.setAccessible(true);
                     Class<?> fieldType = field.getType();
                     if(Parser.exists(fieldType))
-                        field.set(this, Parser.getParser(fieldType).loadFromConfig(this, annotation.value()));
+                        field.set(this, Parser.getParser(fieldType).loadFromConfig(this, this.defaultPath + annotation.value()));
                     else
-                        field.set(this, this.get(annotation.value()));
+                        field.set(this, this.get(this.defaultPath + annotation.value()));
                 }
             }
         } catch (IllegalAccessException error) {
@@ -83,27 +83,27 @@ public abstract class Config extends YamlConfiguration{
 
     @Nullable
     public ItemStack getItemStack(@NotNull String path) {
-        return ItemStackParser.getInstance().loadFromConfig(this, path);
+        return ItemStackParser.getInstance().loadFromConfig(this, this.defaultPath + path);
     }
 
     @NotNull
     public CustomSound getCustomSound(@NotNull String path) {
-        return CustomSoundParser.getInstance().loadFromConfig(this, path);
+        return CustomSoundParser.getInstance().loadFromConfig(this, this.defaultPath + path);
     }
 
     @NotNull
     public GuiItem getGuiItem(@NotNull String path) {
-        return GuiItemParser.getInstance().loadFromConfig(this, path);
+        return GuiItemParser.getInstance().loadFromConfig(this, this.defaultPath + path);
     }
 
     @NotNull
     public GuiType getGuiType(@NotNull String path) {
-        return GuiTypeParser.getInstance().loadFromConfig(this, path);
+        return GuiTypeParser.getInstance().loadFromConfig(this, this.defaultPath + path);
     }
     
     @NotNull
     public Message getMessage(@NotNull String path) {
-        return Message.fromText(this.getString(path));
+        return Message.fromText(this.getString(this.defaultPath + path));
     }
 
     public int[] getSlotList(@NotNull String path) {
