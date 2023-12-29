@@ -3,6 +3,7 @@ package com.github.dreamdevelopments.dreamapi.configuration.parsers;
 import com.github.dreamdevelopments.dreamapi.configuration.Config;
 import com.github.dreamdevelopments.dreamapi.utils.ColorUtils;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -11,8 +12,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 
@@ -79,21 +84,24 @@ public final class ItemStackParser extends Parser<ItemStack> {
 
         if (material.equals(Material.PLAYER_HEAD)) {
             SkullMeta skullMeta = (SkullMeta) itemMeta;
-/*            if(this.getConfig().contains(path + ".owner")) {
-                PlayerProfile profile = Bukkit.getServer().createPlayerProfile(this.getConfig().getString(path + ".owner"));
+            if(config.contains(path + ".owner")) {
+                PlayerProfile profile = Bukkit.getServer().createPlayerProfile(config.getString(path + ".owner"));
                 skullMeta.setOwnerProfile(profile);
             }
-            else if(this.getConfig().contains(path + ".texture")){
-                GameProfile gameProfile = new GameProfile(UUID.randomUUID(), null);
-                gameProfile.getProperties().put("textures", new Property("textures", this.getConfig().getString(path + ".texture")));
+            else if(config.contains(path + ".texture")){
+                PlayerProfile profile = Bukkit.getServer().createPlayerProfile("CustomHead");
+                PlayerTextures textures = profile.getTextures();
+                URL url;
                 try {
-                    Field profileField = skullMeta.getClass().getDeclaredField("profile");
-                    profileField.setAccessible(true);
-                    profileField.set(skullMeta, gameProfile);
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    e.printStackTrace();
+                    textures.setSkin(new URL(Objects.requireNonNull(config.getString(path + ".texture"))));
+                    skullMeta.setOwnerProfile(profile);
+                } catch (MalformedURLException e) {
+                    config.getPlugin().getLogger().warning(
+                            String.format("Invalid texture url \"%s\" in %s/%s. The texture url must start with \"http://textures.minecraft.net/texture/\".",
+                                    rawMaterial, config.getPlugin().getName(), config.getFileName())
+                    );
                 }
-            }*/
+            }
         }
         item.setItemMeta(itemMeta);
         return item;
