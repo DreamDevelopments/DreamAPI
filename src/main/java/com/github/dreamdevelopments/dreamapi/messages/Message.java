@@ -47,6 +47,12 @@ public interface Message {
     void sendMessage(@NotNull Player player);
 
     /**
+     * Sends the message in the actionbar to a player
+     * @param player The player that receives the message
+     */
+    void sendActionbar(@NotNull Player player);
+
+    /**
      * Creates a custom player inventory with this message as the title
      * @param owner Inventory holder
      * @param size Size of the inventory

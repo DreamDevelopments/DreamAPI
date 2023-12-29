@@ -27,6 +27,9 @@ public final class EmptyMessage implements Message {
     public void sendMessage(@NotNull Player player) {}
 
     @Override
+    public void sendActionbar(@NotNull Player player) {}
+
+    @Override
     public Inventory createInventory(InventoryHolder owner, int size) {
         return Bukkit.createInventory(owner, size);
     }

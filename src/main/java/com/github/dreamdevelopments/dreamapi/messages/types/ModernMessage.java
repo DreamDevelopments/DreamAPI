@@ -70,6 +70,11 @@ public class ModernMessage implements Message {
     }
 
     @Override
+    public void sendActionbar(@NotNull Player player) {
+        player.sendActionBar(this.getModifiedMessage(player));
+    }
+
+    @Override
     public Inventory createInventory(InventoryHolder owner, int size) {
         return Bukkit.createInventory(owner, size, this.getModifiedMessage((Player)owner));
     }
