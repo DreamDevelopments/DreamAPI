@@ -16,6 +16,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface Message {
 
+    //TODO: Add new line character inside message
+
     /**
      * Create a new message based on the server type
      * @param message The raw message as a String
