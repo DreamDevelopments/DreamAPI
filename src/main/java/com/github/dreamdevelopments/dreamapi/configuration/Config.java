@@ -10,6 +10,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -101,6 +102,13 @@ public abstract class Config extends YamlConfiguration{
         if(this.isInt(path))
             return new int[]{this.getInt(path)};
         return this.getIntegerList(path).stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    @Override
+    @Contract("_, !null -> !null")
+    @Nullable
+    public Object get(@NotNull String path, @Nullable Object def) {
+        return super.get(this.defaultPath + path, def);
     }
 
 }
