@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 
 public abstract class Config extends YamlConfiguration{
 
+    @Getter
     protected final JavaPlugin plugin;
 
     @Getter
