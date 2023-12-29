@@ -21,6 +21,7 @@ public class LegacyText {
      */
     @NotNull
     public static String replaceAllColorCodes(@Nullable String string) {
+        //TODO: Replace MiniMessages tags with legacy color codes properly
         if(string == null)
             return "";
         return ChatColor.translateAlternateColorCodes('&', translateHexColorCodes("#", "", string));
