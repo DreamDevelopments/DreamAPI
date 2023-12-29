@@ -44,6 +44,8 @@ public final class ItemStackParser extends Parser<ItemStack> {
         ItemMeta itemMeta = item.getItemMeta();
         assert itemMeta != null;
 
+        //TODO: Add support for MiniMessages
+
         if (config.contains(path + ".name")) {
             itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(config.getString(path + ".name"))));
         }
