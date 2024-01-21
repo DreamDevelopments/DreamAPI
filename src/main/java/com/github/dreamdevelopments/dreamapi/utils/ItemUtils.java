@@ -6,11 +6,14 @@ import com.github.dreamdevelopments.dreamapi.messages.types.EmptyMessage;
 import com.github.dreamdevelopments.dreamapi.messages.types.LegacyMessage;
 import com.github.dreamdevelopments.dreamapi.messages.types.ModernMessage;
 import net.kyori.adventure.text.Component;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ItemUtils {
 
@@ -109,6 +112,30 @@ public class ItemUtils {
         for(Component line : lore)
             newLore.add(new ModernMessage(line));
         return newLore;
+    }
+
+    public static ItemStack replacePlaceholders(ItemStack itemStack, HashMap<String, String> placeholders) {
+        ItemStack newItem = itemStack.clone();
+        ItemMeta meta = newItem.getItemMeta();
+        if (meta.hasDisplayName()) {
+            String name = meta.getDisplayName();
+            for (Map.Entry<String, String> placeholder : placeholders.entrySet()) {
+                name = name.replace(placeholder.getKey(), placeholder.getValue());
+            }
+            meta.setDisplayName(name);
+        }
+        if (meta.hasLore()) {
+            List<String> lore = meta.getLore();
+            for (int i = 0; i < lore.size(); i++) {
+                String line = lore.get(i);
+                for (Map.Entry<String, String> placeholder : placeholders.entrySet()) {
+                    line = line.replace(placeholder.getKey(), placeholder.getValue());
+                }
+                lore.set(i, line);
+            }
+            meta.setLore(lore);
+        }
+        return newItem;
     }
 
 }
