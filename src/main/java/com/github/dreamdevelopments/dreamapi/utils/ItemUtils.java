@@ -114,6 +114,12 @@ public class ItemUtils {
         return newLore;
     }
 
+    /**
+     * Replaces a list of placeholders in the name and lore of an item
+     * @param itemStack The item to replace the placeholders in
+     * @param placeholders The placeholders to replace
+     * @return A new item with the placeholders replaced
+     */
     public static ItemStack replacePlaceholders(ItemStack itemStack, HashMap<String, String> placeholders) {
         ItemStack newItem = itemStack.clone();
         ItemMeta meta = newItem.getItemMeta();
