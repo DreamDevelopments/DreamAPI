@@ -8,14 +8,19 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+
 @Getter
 public abstract class Gui {
 
     protected Inventory inventory;
+    protected Player player;
     private final GuiType guiType;
+    private final HashMap<String, String> placeholders;
 
     public Gui(GuiType guiType) {
         this.guiType = guiType;
+        this.placeholders = new HashMap<>();
     }
 
     public abstract boolean canOpen(@NotNull Player player);
@@ -34,13 +39,16 @@ public abstract class Gui {
     }
 
     public void open(@NotNull Player player) {
+        this.player = player;
         if(this.canOpen(player)) {
-            this.inventory = this.guiType.createInventory(player);
+            this.inventory = this.guiType.createInventory(this);
             if(!this.onOpen(player))
                 return;
             player.openInventory(inventory);
             this.registerInventory(player);
         }
+        else
+            this.player = null;
     }
 
     public void close(@NotNull InventoryCloseEvent event) {
@@ -64,11 +72,7 @@ public abstract class Gui {
     }
 
     public void update() {
-        this.guiType.update(this.getInventory(), this.getPlayer());
-    }
-
-    public Player getPlayer() {
-        return (Player)this.inventory.getHolder();
+        this.guiType.update(this);
     }
 
 }

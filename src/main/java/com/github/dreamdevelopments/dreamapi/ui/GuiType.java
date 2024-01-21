@@ -54,17 +54,17 @@ public class GuiType {
         this.clickSound = clickSound;
     }
 
-    public Inventory createInventory(Player owner) {
-        Inventory inventory = this.inventoryType == null ? this.title.createInventory(owner, this.size) : this.title.createInventory(owner, this.inventoryType);
-        this.update(inventory, owner);
+    public Inventory createInventory(Gui gui) {
+        Inventory inventory = this.inventoryType == null ? this.title.createInventory(gui.getPlayer(), this.size) : this.title.createInventory(gui.getPlayer(), this.inventoryType);
+        this.update(gui);
         return inventory;
     }
 
-    public void update(Inventory inventory, Player owner) {
+    public void update(Gui gui) {
         for(GuiItem item : this.items)
-            item.addToInventory(inventory, owner);
+            item.addToInventory(gui);
         for(Button button : this.buttons)
-            button.update(inventory, owner);
+            button.update(gui);
     }
 
 }

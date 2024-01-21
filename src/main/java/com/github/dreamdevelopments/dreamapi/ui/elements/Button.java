@@ -20,6 +20,11 @@ public class Button {
         this.onClick = onClick;
     }
 
+    public void update(Gui gui) {
+        item.addToInventory(gui);
+    }
+
+    @Deprecated
     public void update(Inventory inventory, Player player) {
         item.addToInventory(inventory, player);
     }
