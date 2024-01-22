@@ -141,6 +141,7 @@ public class ItemUtils {
             }
             meta.setLore(lore);
         }
+        newItem.setItemMeta(meta);
         return newItem;
     }
 

@@ -2,6 +2,7 @@ package com.github.dreamdevelopments.dreamapi.ui;
 
 import com.github.dreamdevelopments.dreamapi.ui.elements.Button;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 @Getter
 public abstract class Gui {
 
+    @Setter
     protected Inventory inventory;
     protected Player player;
     private final GuiType guiType;
@@ -41,7 +43,7 @@ public abstract class Gui {
     public void open(@NotNull Player player) {
         this.player = player;
         if(this.canOpen(player)) {
-            this.inventory = this.guiType.createInventory(this);
+            this.guiType.createInventory(this);
             if(!this.onOpen(player))
                 return;
             player.openInventory(inventory);

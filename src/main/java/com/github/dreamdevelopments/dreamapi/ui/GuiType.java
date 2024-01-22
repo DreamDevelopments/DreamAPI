@@ -5,9 +5,7 @@ import com.github.dreamdevelopments.dreamapi.messages.Message;
 import com.github.dreamdevelopments.dreamapi.ui.elements.Button;
 import com.github.dreamdevelopments.dreamapi.ui.elements.GuiItem;
 import lombok.Getter;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,10 +52,13 @@ public class GuiType {
         this.clickSound = clickSound;
     }
 
-    public Inventory createInventory(Gui gui) {
-        Inventory inventory = this.inventoryType == null ? this.title.createInventory(gui.getPlayer(), this.size) : this.title.createInventory(gui.getPlayer(), this.inventoryType);
+    public void createInventory(Gui gui) {
+        gui.setInventory(
+                this.inventoryType == null ?
+                        this.title.createInventory(gui.getPlayer(), this.size) :
+                        this.title.createInventory(gui.getPlayer(), this.inventoryType)
+        );
         this.update(gui);
-        return inventory;
     }
 
     public void update(Gui gui) {
