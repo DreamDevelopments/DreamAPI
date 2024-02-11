@@ -69,8 +69,15 @@ public abstract class Config extends YamlConfiguration{
                 if (annotation != null) {
                     field.setAccessible(true);
                     Class<?> fieldType = field.getType();
-                    if(Parser.exists(fieldType))
-                        field.set(this, Parser.getParser(fieldType).loadFromConfig(this, this.defaultPath + annotation.value()));
+                    if(Parser.exists(fieldType)) {
+                        try {
+                            Object value = Parser.getParser(fieldType).loadFromConfig(this, this.defaultPath + annotation.value());
+                            field.set(this, value);
+                        } catch (Exception error) {
+                            Bukkit.getLogger().warning("Error while loading " + this.fileName + " " + annotation.value() + " field");
+                            error.printStackTrace();
+                        }
+                    }
                     else
                         field.set(this, this.get(this.defaultPath + annotation.value()));
                 }
