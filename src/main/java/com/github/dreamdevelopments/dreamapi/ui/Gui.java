@@ -43,7 +43,8 @@ public abstract class Gui {
     public void open(@NotNull Player player) {
         this.player = player;
         if(this.canOpen(player)) {
-            this.guiType.createInventory(this);
+            if(this.inventory == null)
+                this.guiType.createInventory(this);
             if(!this.onOpen(player))
                 return;
             player.openInventory(inventory);
