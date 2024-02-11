@@ -52,7 +52,7 @@ public class GuiType {
         this.clickSound = clickSound;
     }
 
-    public void createInventory(Gui gui) {
+    public void createInventory(@NotNull Gui gui) {
         gui.setInventory(
                 this.inventoryType == null ?
                         this.title.createInventory(gui.getPlayer(), this.size) :
