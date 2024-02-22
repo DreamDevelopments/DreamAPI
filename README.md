@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
 
-  implementation 'com.github.DreamDevelopments:DreamAPI:0.0.6'
+  implementation 'com.github.DreamDevelopments:DreamAPI:0.1.0'
 
 }
 ```
