@@ -10,12 +10,15 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 public abstract class Gui {
 
     @Setter
     protected Inventory inventory;
+    @Setter
+    protected String title;
     protected Player player;
     private final GuiType guiType;
     private final HashMap<String, String> placeholders;
@@ -76,6 +79,18 @@ public abstract class Gui {
 
     public void update() {
         this.guiType.update(this);
+        this.updateTitle();
+    }
+
+    public void updateTitle() {
+        if(this.title == null)
+            this.title = player.getOpenInventory().getOriginalTitle();
+        String newTitle = this.title;
+        for(Map.Entry<String, String> entry : this.getPlaceholders().entrySet())
+            newTitle = newTitle.replace(entry.getKey(), entry.getValue());
+        if(this.player.getOpenInventory().getTopInventory().equals(this.inventory)) {
+            this.player.getOpenInventory().setTitle(newTitle);
+        }
     }
 
 }
