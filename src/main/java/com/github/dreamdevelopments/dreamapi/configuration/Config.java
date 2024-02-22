@@ -63,54 +63,50 @@ public abstract class Config extends YamlConfiguration{
             error.printStackTrace();
         }
 
-        try {
-            for (Field field : ReflectionUtils.getAllFields(this.getClass())) {
-                ConfigValue annotation = field.getAnnotation(ConfigValue.class);
-                if (annotation != null) {
-                    field.setAccessible(true);
-                    Class<?> fieldType = field.getType();
+        for (Field field : ReflectionUtils.getAllFields(this.getClass())) {
+            ConfigValue annotation = field.getAnnotation(ConfigValue.class);
+            if (annotation != null) {
+                field.setAccessible(true);
+                Class<?> fieldType = field.getType();
+                try {
                     if(Parser.exists(fieldType)) {
-                        try {
-                            Object value = Parser.getParser(fieldType).loadFromConfig(this, this.defaultPath + annotation.value());
-                            field.set(this, value);
-                        } catch (Exception error) {
-                            Bukkit.getLogger().warning("Error while loading " + this.fileName + " " + annotation.value() + " field");
-                            error.printStackTrace();
-                        }
+                        Object value = Parser.getParser(fieldType).loadFromConfig(this, annotation.value());
+                        field.set(this, value);
                     }
                     else
-                        field.set(this, this.get(this.defaultPath + annotation.value()));
+                        field.set(this, this.get(annotation.value()));
+                } catch (Exception error) {
+                    Bukkit.getLogger().warning("Error while loading " + this.fileName + " " + this.defaultPath + "." + annotation.value() + " field");
+                    error.printStackTrace();
                 }
             }
-        } catch (IllegalAccessException error) {
-            error.printStackTrace();
         }
         this.onReload();
     }
 
     @Nullable
     public ItemStack getItemStack(@NotNull String path) {
-        return ItemStackParser.getInstance().loadFromConfig(this, this.defaultPath + path);
+        return ItemStackParser.getInstance().loadFromConfig(this, path);
     }
 
     @NotNull
     public CustomSound getCustomSound(@NotNull String path) {
-        return CustomSoundParser.getInstance().loadFromConfig(this, this.defaultPath + path);
+        return CustomSoundParser.getInstance().loadFromConfig(this, path);
     }
 
     @NotNull
     public GuiItem getGuiItem(@NotNull String path) {
-        return GuiItemParser.getInstance().loadFromConfig(this, this.defaultPath + path);
+        return GuiItemParser.getInstance().loadFromConfig(this, path);
     }
 
     @NotNull
     public GuiType getGuiType(@NotNull String path) {
-        return GuiTypeParser.getInstance().loadFromConfig(this, this.defaultPath + path);
+        return GuiTypeParser.getInstance().loadFromConfig(this, path);
     }
     
     @NotNull
     public Message getMessage(@NotNull String path) {
-        return Message.fromText(this.getString(this.defaultPath + path));
+        return Message.fromText(this.getString(path));
     }
 
     public int[] getSlotList(@NotNull String path) {
