@@ -6,6 +6,6 @@ public class DreamAPIPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        DreamAPI.initialize(this);
+        DreamAPI.initialize(this, "dreamAPI");
     }
 }

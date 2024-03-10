@@ -6,38 +6,57 @@ import com.github.dreamdevelopments.dreamapi.utils.PacketUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
+@Getter
 public final class DreamAPI {
 
     @Getter
-    static ServerType serverType;
+    private static DreamAPI instance;
 
-    @Getter
-    static boolean placeholderAPIEnabled;
+    private ServerType serverType;
 
-    public static void initialize(JavaPlugin plugin) {
-        initializeServer();
-        initializeHandlers();
-        initializeParsers();
-        initializeGui(plugin);
-        initializePackets(plugin);
+    private boolean placeholderAPIEnabled;
+
+    private JavaPlugin plugin;
+
+    private String resourceName;
+
+    public static DreamAPI initialize(@NotNull JavaPlugin plugin, @NotNull String resourceName) {
+        return initialize(plugin, resourceName, true, true, true, true, true);
     }
 
-    public static void initializeServer() {
+    public static DreamAPI initialize(JavaPlugin plugin, String resourceName, boolean server, boolean handlers, boolean parsers, boolean gui, boolean packets) {
+        if(instance == null)
+            instance = new DreamAPI();
+        instance.plugin = plugin;
+        if(server)
+            instance.initializeServer();
+        if(handlers)
+            instance.initializeHandlers();
+        if(parsers)
+            instance.initializeParsers();
+        if(gui)
+            instance.initializeGui(plugin);
+        if(packets)
+            instance.initializePackets(plugin);
+        return instance;
+    }
+    public void initializeServer() {
         for(ServerType serverType : ServerType.values()) {
             if(Bukkit.getVersion().toLowerCase().contains(serverType.getName())) {
-                DreamAPI.serverType = serverType;
+                instance.serverType = serverType;
             }
         }
-        if(DreamAPI.serverType == null)
-            DreamAPI.serverType = ServerType.PAPER;
+        if(instance.serverType == null)
+            instance.serverType = ServerType.PAPER;
     }
 
-    public static void initializeHandlers() {
-        placeholderAPIEnabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
+    public void initializeHandlers() {
+        instance.placeholderAPIEnabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
     }
 
-    public static void initializeParsers() {
+    public void initializeParsers() {
         new CustomSoundParser();
         new GuiItemParser();
         new GuiTypeParser();
@@ -45,11 +64,11 @@ public final class DreamAPI {
         new MessageParser();
     }
 
-    public static void initializePackets(JavaPlugin plugin) {
+    public void initializePackets(JavaPlugin plugin) {
         new PacketUtils(plugin);
     }
 
-    public static void initializeGui(JavaPlugin plugin) {
+    public void initializeGui(JavaPlugin plugin) {
         GuiManager.initialize(plugin);
     }
 

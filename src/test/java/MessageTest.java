@@ -25,8 +25,8 @@ public class MessageTest {
         try(MockedStatic<Bukkit> bukkit = Mockito.mockStatic(Bukkit.class)) {
             //TODO: Replace with realistic version example
             bukkit.when(Bukkit::getVersion).thenReturn("Spigot 1.20.1");
-            DreamAPI.initializeServer();
-            Assertions.assertEquals(ServerType.SPIGOT, DreamAPI.getServerType());
+            DreamAPI.initialize(null, "dreamAPI", true, false, false, false, false);
+            Assertions.assertEquals(ServerType.SPIGOT, DreamAPI.getInstance().getServerType());
 
             // Test Legacy Messages
 
@@ -54,8 +54,8 @@ public class MessageTest {
         try(MockedStatic<Bukkit> bukkit = Mockito.mockStatic(Bukkit.class)) {
             //TODO: Replace with realistic version example
             bukkit.when(Bukkit::getVersion).thenReturn("Paper 1.20.1");
-            DreamAPI.initializeServer();
-            Assertions.assertEquals(ServerType.PAPER, DreamAPI.getServerType());
+            DreamAPI.initialize(null, "dreamAPI", true, false, false, false, false);
+            Assertions.assertEquals(ServerType.PAPER, DreamAPI.getInstance().getServerType());
 
             // Test modern messages
 
