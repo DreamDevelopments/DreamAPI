@@ -1,6 +1,8 @@
 package com.github.dreamdevelopments.dreamapi.ui;
 
+import com.github.dreamdevelopments.dreamapi.DreamAPI;
 import com.github.dreamdevelopments.dreamapi.ui.elements.Button;
+import com.github.dreamdevelopments.dreamapi.utils.PacketUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
@@ -83,13 +85,18 @@ public abstract class Gui {
     }
 
     public void updateTitle() {
-        if(this.title == null)
-            this.title = player.getOpenInventory().getOriginalTitle();
-        String newTitle = this.title;
-        for(Map.Entry<String, String> entry : this.getPlaceholders().entrySet())
-            newTitle = newTitle.replace(entry.getKey(), entry.getValue());
-        if(this.player.getOpenInventory().getTopInventory().equals(this.inventory)) {
-            this.player.getOpenInventory().setTitle(newTitle);
+        if(PacketUtils.isEnabled()) {
+            PacketUtils.updateTitlePlaceholders(this.player, this.placeholders);
+        }
+        else {
+            if (this.title == null)
+                this.title = player.getOpenInventory().getOriginalTitle();
+            String newTitle = this.title;
+            for (Map.Entry<String, String> entry : this.getPlaceholders().entrySet())
+                newTitle = newTitle.replace(entry.getKey(), entry.getValue());
+            if (this.player.getOpenInventory().getTopInventory().equals(this.inventory)) {
+                this.player.getOpenInventory().setTitle(newTitle);
+            }
         }
     }
 

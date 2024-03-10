@@ -2,6 +2,7 @@ package com.github.dreamdevelopments.dreamapi;
 
 import com.github.dreamdevelopments.dreamapi.configuration.parsers.*;
 import com.github.dreamdevelopments.dreamapi.ui.GuiManager;
+import com.github.dreamdevelopments.dreamapi.utils.PacketUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,6 +20,7 @@ public final class DreamAPI {
         initializeHandlers();
         initializeParsers();
         initializeGui(plugin);
+        initializePackets(plugin);
     }
 
     public static void initializeServer() {
@@ -27,6 +29,8 @@ public final class DreamAPI {
                 DreamAPI.serverType = serverType;
             }
         }
+        if(DreamAPI.serverType == null)
+            DreamAPI.serverType = ServerType.PAPER;
     }
 
     public static void initializeHandlers() {
@@ -39,6 +43,10 @@ public final class DreamAPI {
         new GuiTypeParser();
         new ItemStackParser();
         new MessageParser();
+    }
+
+    public static void initializePackets(JavaPlugin plugin) {
+        new PacketUtils(plugin);
     }
 
     public static void initializeGui(JavaPlugin plugin) {
