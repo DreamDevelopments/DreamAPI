@@ -1,5 +1,5 @@
 allprojects {
-    version = "0.1.0"
+    version = "0.1.2"
     group = 'com.github.dreamdevelopments'
 
     apply plugin: 'java-library'
@@ -47,6 +47,10 @@ repositories {
         name ='papi'
         url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
     }
+    maven {
+        name = 'protocollib'
+        url "https://repo.dmulloy2.net/repository/public/"
+    }
 }
 
 dependencies {
@@ -56,7 +60,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.26'
 
     compileOnly 'me.clip:placeholderapi:2.11.4'
-
+    compileOnly 'com.comphenix.protocol:ProtocolLib:5.1.0'
 
     testImplementation 'io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT'
     testImplementation 'org.mockito:mockito-inline:4.11.0'
