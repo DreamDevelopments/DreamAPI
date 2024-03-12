@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 
 public class StringUtils {
 
-    private static String streamToString(InputStream is) {
+    public static String streamToString(InputStream is) {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
