@@ -31,7 +31,7 @@ public interface Message {
         if(message == null || message.isEmpty())
             return EmptyMessage.getEmptyMessage();
 
-        return switch (DreamAPI.getServerType()) {
+        return switch (DreamAPI.getInstance().getServerType()) {
             case SPIGOT -> new LegacyMessage(message, hasPlaceholders && PAPIHandler.hasPlaceholders(message));
             case PAPER -> new ModernMessage(message, hasPlaceholders && PAPIHandler.hasPlaceholders(message));
         };

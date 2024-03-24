@@ -27,7 +27,7 @@ public class ItemUtils {
     public static void setItemName(@NotNull ItemMeta meta, @NotNull Message name) {
         if(name.getType().isEmpty())
             meta.setDisplayName("");
-        if(DreamAPI.getServerType().isModern()) {
+        if(DreamAPI.getInstance().getServerType().isModern()) {
             meta.displayName(((ModernMessage) name).getMessage());
         }
         else
@@ -41,7 +41,7 @@ public class ItemUtils {
      */
     @NotNull @SuppressWarnings("deprecation")
     public static Message getItemName(@NotNull ItemMeta meta) {
-        if(DreamAPI.getServerType().isModern()) {
+        if(DreamAPI.getInstance().getServerType().isModern()) {
             Component name = meta.displayName();
             if(name == null)
                 return EmptyMessage.getEmptyMessage();
@@ -59,7 +59,7 @@ public class ItemUtils {
      * @param lore The lore to set
      */
     public static void setItemLore(@NotNull ItemMeta meta, @NotNull List<Message> lore) {
-        if(DreamAPI.getServerType().isModern())
+        if(DreamAPI.getInstance().getServerType().isModern())
             setModernItemLore(meta, lore);
         else
             setLegacyItemLore(meta, lore);
@@ -88,7 +88,7 @@ public class ItemUtils {
      */
     @NotNull
     public static List<Message> getItemLore(@NotNull ItemMeta meta) {
-        if(DreamAPI.getServerType().isModern())
+        if(DreamAPI.getInstance().getServerType().isModern())
             return getModernItemLore(meta);
         return getLegacyItemLore(meta);
     }

@@ -18,7 +18,7 @@ public class PAPIHandler {
      * @return The string with placeholders replaced
      */
     public static String replacePlaceholders(String message, Player player) {
-        if(DreamAPI.isPlaceholderAPIEnabled())
+        if(DreamAPI.getInstance().isPlaceholderAPIEnabled())
             return PlaceholderAPI.setPlaceholders(player, message);
         return message;
     }
@@ -29,13 +29,13 @@ public class PAPIHandler {
      * @return Whether the message contains placeholders or not
      */
     public static boolean hasPlaceholders(String message) {
-        if(!DreamAPI.isPlaceholderAPIEnabled())
+        if(!DreamAPI.getInstance().isPlaceholderAPIEnabled())
             return false;
         return PlaceholderAPI.containsPlaceholders(message);
     }
 
     public static ItemStack replacePlaceholders(ItemStack itemStack, Player player) {
-        if(!DreamAPI.isPlaceholderAPIEnabled())
+        if(!DreamAPI.getInstance().isPlaceholderAPIEnabled())
             return itemStack;
         ItemStack newItem = itemStack.clone();
         ItemMeta meta = newItem.getItemMeta();
