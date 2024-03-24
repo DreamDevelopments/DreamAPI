@@ -18,9 +18,9 @@ You can import DreamAPI using Maven or Gradle
 ```gradle
 
 repositories {
-  mavenCentral()
 
   maven { url 'https://jitpack.io' }
+
 }
 
 dependencies {
