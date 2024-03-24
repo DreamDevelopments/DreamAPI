@@ -25,7 +25,7 @@ repositories {
 
 dependencies {
 
-  implementation 'com.github.DreamDevelopments:DreamAPI:0.1.0'
+  implementation 'com.github.DreamDevelopments:DreamAPI:0.1.2'
 
 }
 ```
@@ -46,7 +46,7 @@ dependencies {
   <dependency>
     <groupId>com.github.DreamDevelopments</groupId>
     <artifactId>DreamAPI</artifactId>
-    <version>Tag</version>
+    <version>0.1.2</version>
   </dependency>
 
 </dependencies>
