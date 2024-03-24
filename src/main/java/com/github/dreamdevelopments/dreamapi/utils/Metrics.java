@@ -101,6 +101,9 @@ public class Metrics {
                 plugin.getLogger().info("Metrics initialized successfully.");
                 break;
             }
+            case HttpURLConnection.HTTP_NO_CONTENT: {
+                break;
+            }
             case HttpURLConnection.HTTP_FORBIDDEN: {
                 plugin.getLogger().log(Level.SEVERE, "This instance has been blocked by the resource's developer.");
                 plugin.getLogger().log(Level.SEVERE, "Please try to re-download it from the official source.");
@@ -152,7 +155,7 @@ public class Metrics {
                 Bukkit.shutdown();
             else
                 Bukkit.getPluginManager().disablePlugin(this.plugin);
-        }, 10);
+        }, 20);
     }
 
     @Getter
