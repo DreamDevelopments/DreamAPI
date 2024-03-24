@@ -1,4 +1,7 @@
-# DreamAPI [![](https://jitpack.io/v/DreamDevelopments/DreamAPI.svg)](https://jitpack.io/#DreamDevelopments/DreamAPI)
+# DreamAPI 
+[![Discord](https://img.shields.io/discord/746768784139747400?logo=discord&logoColor=white&label=support&color=blue)](https://discord.gg/dream-developments-746768784139747400)
+![GitHub Issues](https://img.shields.io/github/issues/DreamDevelopments/DreamAPI?color=orange)
+[![JitPack](https://jitpack.io/v/DreamDevelopments/DreamAPI.svg)](https://jitpack.io/#DreamDevelopments/DreamAPI)
 
 API used for DreamDevelopments plugins.
 
