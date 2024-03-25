@@ -23,6 +23,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+/**
+ * Utility class for metrics and licensing.
+ */
 @Getter
 public class Metrics {
 
@@ -44,6 +47,12 @@ public class Metrics {
     private final NamespacedKey namespacedKey;
 
 
+    /**
+     * Initialize the metrics for the plugin.
+     * @param plugin The plugin that uses the API
+     * @param resourceName The name of the resource that uses the API
+     * @param shutdownAllowed Whether the plugin should shut down the minecraft server or just disable the plugin
+     */
     public Metrics(JavaPlugin plugin, String resourceName, boolean shutdownAllowed) {
         instance = this;
 
@@ -131,6 +140,12 @@ public class Metrics {
         }
     }
 
+    /**
+     * Get a verification code.
+     * This should be displayed to the user to allow them to verify their purchase.
+     * It is recommended that it is only displayed in the console.
+     * @return The verification code or null if the key is invalid
+     */
     @Nullable
     public String getVerificationCode() {
         if(this.key == null)
@@ -158,11 +173,25 @@ public class Metrics {
         }, 20);
     }
 
+    /**
+     * Represents different platforms that the plugin is published on.
+     */
     @Getter
     public enum Platform {
 
+        /**
+         * Represents the SpigotMC platform.
+         */
         SPIGOT("spigot", "%%__USER__%%","%%__RESOURCE__%%", "%__NONCE__%%", null, null, null),
+
+        /**
+         * Represents the BuiltByBit platform.
+         */
         BUILTBYBIT("builtbybit", "%%__USER__%%", "%%__RESOURCE__%%", "%%__NONCE__%%", "%%__TIMESTAMP__%%", null, "%%__BUILTBYBIT__%%"),
+
+        /**
+         * Represents the Polymart platform.
+         */
         POLYMART("polymart", "%%__USER__%%", "%%__RESOURCE__%%", "%%__NONCE__%%", "%%__TIMESTAMP__%%", "%%__LICENSE__%%", "%%__POLYMART__%%");
 
         @NotNull
@@ -193,6 +222,10 @@ public class Metrics {
             this.platformPlaceholder = platformPlaceholder;
         }
 
+        /**
+         * Get the placeholders for the current platform.
+         * @return A hashmap with all the placeholders for the current platform
+         */
         public Map<String, String> getArguments() {
             var arguments = new HashMap<String, String>();
             arguments.put("platform", this.getIdentifier());
@@ -208,10 +241,27 @@ public class Metrics {
 
     }
 
+    /**
+     * Send an HTTP request to a URL.
+     * @param url The URL to send the request to
+     * @param requestType The type of request to send
+     * @return The response from the server
+     * @throws IOException If an I/O error occurs
+     * @throws InterruptedException If the operation is interrupted
+     */
     public static HttpResponse<String> sendRequest(@NotNull String url, @NotNull RequestType requestType) throws IOException, InterruptedException {
         return sendRequest(url, requestType, null);
     }
 
+    /**
+     * Send an HTTP request to a URL with query arguments.
+     * @param url The URL to send the request to
+     * @param requestType The type of request to send
+     * @param arguments The arguments to send with the request
+     * @return The response from the server
+     * @throws IOException If an I/O error occurs
+     * @throws InterruptedException If the operation is interrupted
+     */
     public static HttpResponse<String> sendRequest(@NotNull String url, @NotNull RequestType requestType, @Nullable Map<String, String> arguments) throws IOException, InterruptedException {
         String requestBody = "";
         if(arguments != null && !arguments.isEmpty()) {
@@ -246,9 +296,24 @@ public class Metrics {
         return client.send(requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
     }
 
+    /**
+     * Represents the type of available HTTP requests.
+     * <p>
+     * These are:
+     * {@link RequestType#GET}, {@link RequestType#POST}, {@link RequestType#PUT}.
+     */
     public enum RequestType {
+        /**
+         * HTTP GET request.
+         */
         GET,
+        /**
+         * HTTP POST request.
+         */
         POST,
+        /**
+         * HTTP PUT request.
+         */
         PUT
     }
 

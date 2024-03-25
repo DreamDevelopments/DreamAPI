@@ -17,7 +17,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Message object that uses the Adventure API used in Paper
+ * Message object that uses the Adventure API present in Paper.
  */
 @Getter
 public class ModernMessage implements Message {

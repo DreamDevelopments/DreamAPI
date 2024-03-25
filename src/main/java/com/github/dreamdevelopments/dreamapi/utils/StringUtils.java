@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+/**
+ * A utility class for operations on {@link String} objects.
+ */
 public class StringUtils {
 
     /**

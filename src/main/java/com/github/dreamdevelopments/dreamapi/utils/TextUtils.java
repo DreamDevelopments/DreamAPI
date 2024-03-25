@@ -2,13 +2,29 @@ package com.github.dreamdevelopments.dreamapi.utils;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Utility class for formatting text.
+ */
 public class TextUtils {
 
+    /**
+     * Format the name of an enum that uses underscores to separate words in a more human-readable format.
+     * @param enumName The name of the enum as a string
+     * @param capitalize Whether to capitalize the first letter of the string
+     * @return The formatted enum name
+     */
     @NotNull
     public static String formatEnumName(@NotNull String enumName, boolean capitalize) {
         return formatEnumName(enumName, "", capitalize);
     }
 
+    /**
+     * Format the name of an enum that uses underscores to separate words in a more human-readable format.
+     * @param enumName The name of the enum as a string
+     * @param wordDivider The string to use to separate words
+     * @param capitalize Whether to capitalize the first letter of the string
+     * @return The formatted enum name
+     */
     @NotNull
     public static String formatEnumName(@NotNull String enumName, String wordDivider, boolean capitalize) {
         char[] name = enumName.toLowerCase().toCharArray();

@@ -31,21 +31,45 @@ import java.lang.reflect.Field;
  */
 public abstract class Config extends YamlConfiguration{
 
+    /**
+     * The plugin that uses this config.
+     */
     @Getter
     protected final JavaPlugin plugin;
 
+    /**
+     * The path of the file for this config. It is saved in the plugin's data folder.
+     */
     @Getter
     private final String fileName;
+
+    /**
+     * The file object for this config.
+     */
     protected final File configFile;
 
+    /**
+     * The base path for this config in the file.
+     */
     @Getter
     private final String defaultPath;
 
 
+    /**
+     * Create a new Config object.
+     * @param plugin The plugin that uses this config
+     * @param fileName The path to the config file. It will be saved in the plugin's data folder.
+     */
     public Config(JavaPlugin plugin, String fileName) {
         this(plugin, fileName, "");
     }
 
+    /**
+     * Create a new Config object.
+     * @param plugin The plugin that uses this config
+     * @param fileName The path to the config file. It will be saved in the plugin's data folder.
+     * @param defaultPath The base path for this config uses in the file.
+     */
     public Config(JavaPlugin plugin, String fileName, String defaultPath) {
         super();
         this.plugin = plugin;

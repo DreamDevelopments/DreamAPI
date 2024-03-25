@@ -12,6 +12,10 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 public @interface ConfigValue {
 
+    /**
+     * The path to the value in the config.
+     * @return The path to the value in the config.
+     */
     String value();
 
 }

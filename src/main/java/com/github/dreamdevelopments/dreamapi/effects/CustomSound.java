@@ -12,8 +12,15 @@ import org.jetbrains.annotations.Nullable;
  */
 public record CustomSound(@Nullable Sound sound, float volume, float pitch) {
 
+    /**
+     * A constant to represent no sound. This should be usually returned instead of null.
+     */
     public static final CustomSound NONE = new CustomSound(null, 0, 0);
 
+    /**
+     * Plays the sound to the player.
+     * @param player The player to play the sound to
+     */
     public void playSound(Player player) {
         if(this.sound == null)
             return;

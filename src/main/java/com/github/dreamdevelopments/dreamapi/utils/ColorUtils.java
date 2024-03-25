@@ -3,6 +3,9 @@ package com.github.dreamdevelopments.dreamapi.utils;
 import org.bukkit.Color;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A utility class for handling hex colors.
+ */
 public class ColorUtils {
 
     /**

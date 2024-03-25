@@ -7,11 +7,17 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A class to parse {@link Location} Objects from a {@link Config}.
+ */
 public class LocationParser extends Parser<Location> {
 
     @Getter
     private static LocationParser instance;
 
+    /**
+     * Initialize this parser.
+     */
     public LocationParser() {
         super(Location.class);
         instance = this;
