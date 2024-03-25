@@ -43,7 +43,7 @@ public final class ItemStackParser extends Parser<ItemStack> {
         try {
             material = Material.valueOf(rawMaterial.toUpperCase());
         } catch (IllegalArgumentException e) {
-            config.getPlugin().getLogger().warning(String.format("Invalid material %s in %s/%s", rawMaterial, config.getPlugin().getName(), config.getFileName()));
+            Parser.warning(config, path, "Invalid material: " + rawMaterial);
         }
 
         ItemStack item = new ItemStack(material);
@@ -94,14 +94,14 @@ public final class ItemStackParser extends Parser<ItemStack> {
             else if(config.contains(path + ".texture")){
                 PlayerProfile profile = Bukkit.getServer().createPlayerProfile("CustomHead");
                 PlayerTextures textures = profile.getTextures();
-                URL url;
+                String url = config.getString(path + ".texture");
+                assert url != null;
                 try {
-                    textures.setSkin(new URL(Objects.requireNonNull(config.getString(path + ".texture"))));
+                    textures.setSkin(new URL(url));
                     skullMeta.setOwnerProfile(profile);
                 } catch (MalformedURLException e) {
-                    config.getPlugin().getLogger().warning(
-                            String.format("Invalid texture url \"%s\" in %s/%s. The texture url must start with \"http://textures.minecraft.net/texture/\".",
-                                    rawMaterial, config.getPlugin().getName(), config.getFileName())
+                    Parser.warning(config, path,
+                            "Invalid texture url \"" + url + "\". The texture url must start with \"http://textures.minecraft.net/texture/\"."
                     );
                 }
             }

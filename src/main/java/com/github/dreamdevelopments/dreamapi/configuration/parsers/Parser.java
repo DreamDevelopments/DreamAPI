@@ -30,6 +30,19 @@ public abstract class Parser<T> {
         return parsers.containsKey(clazz);
     }
 
+    /**
+     * Displays a warning message in the console if there was an error while loading an Object from the config.
+     * @param config The {@link Config} used to load the Object
+     * @param path The path to the Object that failed to load
+     * @param message The error message
+     */
+    public static void warning(@NotNull Config config, @NotNull String path, @NotNull String message) {
+        config.getPlugin().getLogger().warning(
+                String.format("There was an error while loading %s in %s/%s config: %s",
+                        path, config.getPlugin().getName(), config.getFileName(), message)
+        );
+    }
+
     private final Class<T> classType;
 
     public Parser(@NotNull Class<T> classType) {

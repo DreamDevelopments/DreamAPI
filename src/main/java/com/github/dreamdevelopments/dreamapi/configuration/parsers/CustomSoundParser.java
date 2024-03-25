@@ -25,7 +25,13 @@ public class CustomSoundParser extends Parser<CustomSound> {
         if(stringValue == null || stringValue.isEmpty())
             return CustomSound.NONE;
         String[] rawData = stringValue.split(" ");
-        Sound sound = Sound.valueOf(rawData[0].toUpperCase());
+        Sound sound;
+        try {
+            sound = Sound.valueOf(rawData[0].toUpperCase());
+        } catch (IllegalArgumentException e) {
+            Parser.warning(config, path, "Invalid sound: " + rawData[0]);
+            return CustomSound.NONE;
+        }
         float volume = 1, pitch = 1;
         if(rawData.length == 2)
             volume = Float.parseFloat(rawData[1]);
