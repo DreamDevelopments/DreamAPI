@@ -34,6 +34,12 @@ public class PAPIHandler {
         return PlaceholderAPI.containsPlaceholders(message);
     }
 
+    /**
+     * Replaces PlaceholderAPI placeholders in an ItemStack
+     * @param itemStack The ItemStack to replace the placeholders in
+     * @param player The player for which placeholders are considered
+     * @return A clone of the itemStack with placeholders replaced
+     */
     public static ItemStack replacePlaceholders(ItemStack itemStack, Player player) {
         if(!DreamAPI.getInstance().isPlaceholderAPIEnabled())
             return itemStack;

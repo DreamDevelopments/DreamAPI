@@ -6,6 +6,9 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Field;
 import java.util.List;
 
+/**
+ * Utility class for interacting with objects using reflection.
+ */
 public class ReflectionUtils {
 
     /**

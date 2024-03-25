@@ -29,6 +29,9 @@ public final class ItemStackParser extends Parser<ItemStack> {
     @Getter
     private static ItemStackParser instance;
 
+    /**
+     * Initialize this parser.
+     */
     public ItemStackParser() {
         super(ItemStack.class);
         instance = this;

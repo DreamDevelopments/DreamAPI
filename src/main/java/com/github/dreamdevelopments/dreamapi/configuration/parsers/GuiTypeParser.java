@@ -20,6 +20,9 @@ public class GuiTypeParser extends Parser<GuiType> {
     @Getter
     private static GuiTypeParser instance;
 
+    /**
+     * Initialize this parser.
+     */
     public GuiTypeParser() {
         super(GuiType.class);
         instance = this;

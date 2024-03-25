@@ -27,6 +27,12 @@ public interface Message {
         return fromText(message, true);
     }
 
+    /**
+     * Create a new message based on the server type
+     * @param message The raw message as a String
+     * @param hasPlaceholders Whether the message contains placeholders
+     * @return The message object
+     */
     static Message fromText(@Nullable String message, boolean hasPlaceholders) {
         if(message == null || message.isEmpty())
             return EmptyMessage.getEmptyMessage();

@@ -2,6 +2,9 @@ package com.github.dreamdevelopments.dreamapi.utils;
 
 import java.util.HashMap;
 
+/**
+ * A utility class for displaying text in different fonts using unicode characters.
+ */
 public class FontUtils {
 
     private final static HashMap<Character, Character> normalToSmallCap;

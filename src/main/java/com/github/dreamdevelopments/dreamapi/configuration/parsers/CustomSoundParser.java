@@ -14,6 +14,9 @@ public class CustomSoundParser extends Parser<CustomSound> {
     @Getter
     private static CustomSoundParser instance;
 
+    /**
+     * Initialize this parser.
+     */
     public CustomSoundParser() {
         super(CustomSound.class);
         instance = this;

@@ -26,6 +26,11 @@ public abstract class Parser<T> {
         return parsers.get(clazz);
     }
 
+    /**
+     * Check if a {@link Parser} exists for a class.
+     * @param clazz The class to check
+     * @return True if there is a Parser for this class.
+     */
     public static boolean exists(Class<?> clazz) {
         return parsers.containsKey(clazz);
     }
@@ -45,6 +50,10 @@ public abstract class Parser<T> {
 
     private final Class<T> classType;
 
+    /**
+     * Create a new Parser for a class.
+     * @param classType The class that the Parser is for.
+     */
     public Parser(@NotNull Class<T> classType) {
         parsers.put(classType, this);
         this.classType = classType;
@@ -66,6 +75,14 @@ public abstract class Parser<T> {
      */
     public abstract void saveToConfig(@NotNull Config config, @NotNull String path, @NotNull T value);
 
+    /**
+     * Save an Object to the config using this parser.
+     * <p>
+     * The value will be cast to {@link T} so the object must be of the type that the parser is for.
+     * @param config  The {@link Config} to save the Object in
+     * @param path The path to save the Object to
+     * @param value The Object to save
+     */
     public void saveObjectToConfig(@NotNull Config config, @NotNull String path, @NotNull Object value) {
         saveToConfig(config, path, classType.cast(value));
     }

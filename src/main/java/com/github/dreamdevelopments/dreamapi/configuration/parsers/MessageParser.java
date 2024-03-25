@@ -13,6 +13,9 @@ public class MessageParser extends Parser<Message> {
     @Getter
     private static MessageParser instance;
 
+    /**
+     * Initialize this parser.
+     */
     public MessageParser() {
         super(Message.class);
         instance = this;
