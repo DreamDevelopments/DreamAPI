@@ -17,7 +17,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Message object that uses the Bukkit API
+ * Message object that uses the Bukkit API.
  */
 @Getter
 public class LegacyMessage implements Message {
