@@ -41,4 +41,9 @@ public class GuiTypeParser extends Parser<GuiType> {
 
         return new GuiType(title, config.getInt(path + ".size"), items, new HashSet<>(), openSound, clickSound);
     }
+
+    @Override
+    public void saveToConfig(@NotNull Config config, @NotNull String path, @NotNull GuiType value) {
+        //TODO: Implement saveToConfig method
+    }
 }

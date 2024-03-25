@@ -19,4 +19,9 @@ public class MessageParser extends Parser<Message> {
     public Message loadFromConfig(@NotNull Config config, @NotNull String path) {
         return Message.fromText(config.getString(path));
     }
+
+    @Override
+    public void saveToConfig(@NotNull Config config, @NotNull String path, @NotNull Message value) {
+        config.set(path, value.toString());
+    }
 }

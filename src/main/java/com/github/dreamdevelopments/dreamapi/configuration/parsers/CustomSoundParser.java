@@ -30,4 +30,9 @@ public class CustomSoundParser extends Parser<CustomSound> {
             pitch = Float.parseFloat(rawData[2]);
         return new CustomSound(sound, volume, pitch);
     }
+
+    @Override
+    public void saveToConfig(@NotNull Config config, @NotNull String path, @NotNull CustomSound value) {
+        config.set(path, (value.sound() != null ? value.sound().name() : "NULL") + " " + value.volume() + " " + value.pitch());
+    }
 }

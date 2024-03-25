@@ -107,4 +107,9 @@ public final class ItemStackParser extends Parser<ItemStack> {
         return item;
     }
 
+    @Override
+    public void saveToConfig(@NotNull Config config, @NotNull String path, @NotNull ItemStack value) {
+        //TODO: Implement saveToConfig method
+    }
+
 }
