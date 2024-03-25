@@ -14,22 +14,6 @@ Includes:
 
 You can import DreamAPI using Maven or Gradle
 
-### Gradle
-```gradle
-
-repositories {
-
-  maven { url 'https://jitpack.io' }
-
-}
-
-dependencies {
-
-  implementation 'com.github.DreamDevelopments:DreamAPI:0.1.2'
-
-}
-```
-
 ### Maven
 ```xml
 <repositories>
@@ -46,7 +30,24 @@ dependencies {
   <dependency>
     <groupId>com.github.DreamDevelopments</groupId>
     <artifactId>DreamAPI</artifactId>
-    <version>0.1.2</version>
+    <version>0.2.1</version>
   </dependency>
 
 </dependencies>
+```
+
+### Gradle
+```gradle
+
+repositories {
+
+  maven { url 'https://jitpack.io' }
+
+}
+
+dependencies {
+
+  implementation 'com.github.DreamDevelopments:DreamAPI:0.2.1'
+
+}
+```
