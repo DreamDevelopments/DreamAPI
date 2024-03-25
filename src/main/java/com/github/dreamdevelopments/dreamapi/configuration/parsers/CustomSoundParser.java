@@ -42,6 +42,9 @@ public class CustomSoundParser extends Parser<CustomSound> {
 
     @Override
     public void saveToConfig(@NotNull Config config, @NotNull String path, @NotNull CustomSound value) {
-        config.set(path, (value.sound() != null ? value.sound().name() : "NULL") + " " + value.volume() + " " + value.pitch());
+        if(value.equals(CustomSound.NONE))
+            config.set(path, "");
+        else
+            config.set(path, (value.sound() != null ? value.sound().name() : "NULL") + " " + value.volume() + " " + value.pitch());
     }
 }
