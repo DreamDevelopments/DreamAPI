@@ -17,7 +17,7 @@ public abstract class Parser<T> {
         return parsers.containsKey(clazz);
     }
 
-    public Parser(@NotNull Class<?> classType) {
+    public Parser(@NotNull Class<T> classType) {
         parsers.put(classType, this);
     }
 
