@@ -8,6 +8,7 @@ import com.github.dreamdevelopments.dreamapi.ui.elements.GuiItem;
 import com.github.dreamdevelopments.dreamapi.utils.ReflectionUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -108,6 +109,16 @@ public abstract class Config extends YamlConfiguration{
     @Nullable
     public ItemStack getItemStack(@NotNull String path) {
         return ItemStackParser.getInstance().loadFromConfig(this, path);
+    }
+
+    /**
+     * Get a Location from the config using the {@link LocationParser}.
+     * @param path The path to the Location to get
+     * @return The requested Location
+     */
+    @Nullable @Override
+    public Location getLocation(@NotNull String path) {
+        return LocationParser.getInstance().loadFromConfig(this, path);
     }
 
     /**
