@@ -5,6 +5,9 @@ import com.github.dreamdevelopments.dreamapi.messages.Message;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A class to parse {@link Message} Objects from a {@link Config}.
+ */
 public class MessageParser extends Parser<Message> {
 
     @Getter

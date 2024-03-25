@@ -12,6 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * A class to parse {@link GuiType} Objects from a {@link Config}.
+ */
 public class GuiTypeParser extends Parser<GuiType> {
 
     @Getter

@@ -21,6 +21,9 @@ import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * A class to parse {@link ItemStack} Objects from a {@link Config}.
+ */
 public final class ItemStackParser extends Parser<ItemStack> {
 
     @Getter

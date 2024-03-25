@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * A class to parse {@link GuiItem} Objects from a {@link Config}.
+ */
 public class GuiItemParser extends Parser<GuiItem> {
 
     @Getter

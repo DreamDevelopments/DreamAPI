@@ -6,6 +6,9 @@ import lombok.Getter;
 import org.bukkit.Sound;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A class to parse {@link CustomSound} Objects from a {@link Config}.
+ */
 public class CustomSoundParser extends Parser<CustomSound> {
 
     @Getter

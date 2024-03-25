@@ -7,6 +7,11 @@ import java.io.InputStreamReader;
 
 public class StringUtils {
 
+    /**
+     * Converts an InputStream to a String
+     * @param is The InputStream
+     * @return The String
+     */
     public static String streamToString(InputStream is) {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
