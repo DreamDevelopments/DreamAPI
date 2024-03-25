@@ -25,7 +25,13 @@ public class CustomSoundParser extends Parser<CustomSound> {
         if(stringValue == null || stringValue.isEmpty())
             return CustomSound.NONE;
         String[] rawData = stringValue.split(" ");
-        Sound sound = Sound.valueOf(rawData[0].toUpperCase());
+        Sound sound;
+        try {
+            sound = Sound.valueOf(rawData[0].toUpperCase());
+        } catch (IllegalArgumentException e) {
+            Parser.warning(config, path, "Invalid sound: " + rawData[0]);
+            return CustomSound.NONE;
+        }
         float volume = 1, pitch = 1;
         if(rawData.length == 2)
             volume = Float.parseFloat(rawData[1]);
@@ -36,6 +42,9 @@ public class CustomSoundParser extends Parser<CustomSound> {
 
     @Override
     public void saveToConfig(@NotNull Config config, @NotNull String path, @NotNull CustomSound value) {
-        config.set(path, (value.sound() != null ? value.sound().name() : "NULL") + " " + value.volume() + " " + value.pitch());
+        if(value.equals(CustomSound.NONE))
+            config.set(path, "");
+        else
+            config.set(path, (value.sound() != null ? value.sound().name() : "NULL") + " " + value.volume() + " " + value.pitch());
     }
 }

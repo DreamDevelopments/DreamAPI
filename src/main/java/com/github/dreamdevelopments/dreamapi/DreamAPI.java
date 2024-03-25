@@ -61,6 +61,7 @@ public final class DreamAPI {
         new GuiItemParser();
         new GuiTypeParser();
         new ItemStackParser();
+        new LocationParser();
         new MessageParser();
     }
 
