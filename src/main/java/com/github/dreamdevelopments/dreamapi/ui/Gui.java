@@ -1,6 +1,5 @@
 package com.github.dreamdevelopments.dreamapi.ui;
 
-import com.github.dreamdevelopments.dreamapi.DreamAPI;
 import com.github.dreamdevelopments.dreamapi.ui.elements.Button;
 import com.github.dreamdevelopments.dreamapi.utils.PacketUtils;
 import lombok.Getter;

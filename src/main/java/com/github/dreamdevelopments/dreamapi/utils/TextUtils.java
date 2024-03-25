@@ -1,6 +1,5 @@
 package com.github.dreamdevelopments.dreamapi.utils;
 
-import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class TextUtils {

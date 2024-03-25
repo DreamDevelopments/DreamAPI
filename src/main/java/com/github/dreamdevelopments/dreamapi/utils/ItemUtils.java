@@ -6,7 +6,6 @@ import com.github.dreamdevelopments.dreamapi.messages.types.EmptyMessage;
 import com.github.dreamdevelopments.dreamapi.messages.types.LegacyMessage;
 import com.github.dreamdevelopments.dreamapi.messages.types.ModernMessage;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
