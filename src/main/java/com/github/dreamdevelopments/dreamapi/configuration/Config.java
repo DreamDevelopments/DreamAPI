@@ -128,6 +128,15 @@ public abstract class Config extends YamlConfiguration{
         return super.getDefault(this.getPath(path));
     }
 
+    @Override
+    public void set(@NotNull String path, @Nullable Object value) {
+        if(value != null && Parser.exists(value.getClass())) {
+            Parser.getParser(value.getClass()).saveObjectToConfig(this, path, value);
+            return;
+        }
+        super.set(this.getPath(path), value);
+    }
+
     private String getPath(String path) {
         String[] pathLocations = path.split(String.valueOf(this.getRoot().options().pathSeparator()));
         String root = pathLocations.length > 0 ? pathLocations[0] : path;
