@@ -34,13 +34,13 @@ public abstract class Config extends YamlConfiguration{
     /**
      * The plugin that uses this config.
      */
-    @Getter
+    @Getter @NotNull
     protected final JavaPlugin plugin;
 
     /**
      * The path of the file for this config. It is saved in the plugin's data folder.
      */
-    @Getter
+    @Getter @NotNull
     private final String fileName;
 
     /**
@@ -51,7 +51,7 @@ public abstract class Config extends YamlConfiguration{
     /**
      * The base path for this config in the file.
      */
-    @Getter
+    @Getter @NotNull
     private final String defaultPath;
 
 
@@ -60,7 +60,7 @@ public abstract class Config extends YamlConfiguration{
      * @param plugin The plugin that uses this config
      * @param fileName The path to the config file. It will be saved in the plugin's data folder.
      */
-    public Config(JavaPlugin plugin, String fileName) {
+    public Config(@NotNull JavaPlugin plugin, @NotNull String fileName) {
         this(plugin, fileName, "");
     }
 
@@ -70,7 +70,7 @@ public abstract class Config extends YamlConfiguration{
      * @param fileName The path to the config file. It will be saved in the plugin's data folder.
      * @param defaultPath The base path for this config uses in the file.
      */
-    public Config(JavaPlugin plugin, String fileName, String defaultPath) {
+    public Config(@NotNull JavaPlugin plugin, @NotNull String fileName, @NotNull String defaultPath) {
         super();
         this.plugin = plugin;
         this.fileName = fileName;
