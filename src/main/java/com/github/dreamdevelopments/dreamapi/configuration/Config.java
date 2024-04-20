@@ -126,6 +126,18 @@ public abstract class Config extends YamlConfiguration{
     }
 
     /**
+     * Attempt to save the configuration to the file using {@link #save(File)}.
+     * If an error occurs, it will be printed to the console.
+     */
+    public void saveTry() {
+        try {
+            this.save(this.configFile);
+        } catch (IOException error) {
+            error.printStackTrace();
+        }
+    }
+
+    /**
      * Get an ItemStack from the config using the {@link ItemStackParser}.
      * @param path The path to the ItemStack to get
      * @return The requested ItemStack
