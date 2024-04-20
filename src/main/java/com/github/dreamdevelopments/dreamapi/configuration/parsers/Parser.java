@@ -44,7 +44,8 @@ public abstract class Parser<T> {
     public static void warning(@NotNull Config config, @NotNull String path, @NotNull String message) {
         config.getPlugin().getLogger().warning(
                 String.format("There was an error while loading %s in %s/%s config: %s",
-                        path, config.getPlugin().getName(), config.getFileName(), message)
+                        (config.getDefaultPath().isEmpty() ? "" : config.getDefaultPath() + ".") + path,
+                        config.getPlugin().getName(), config.getFileName(), message)
         );
     }
 
