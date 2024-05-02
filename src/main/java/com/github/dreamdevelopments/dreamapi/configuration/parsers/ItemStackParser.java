@@ -99,6 +99,8 @@ public final class ItemStackParser extends Parser<ItemStack> {
                 PlayerTextures textures = profile.getTextures();
                 String url = config.getString(path + ".texture");
                 assert url != null;
+                if(!url.startsWith("http"))
+                    url = "http://textures.minecraft.net/texture/" + url;
                 try {
                     textures.setSkin(new URL(url));
                     skullMeta.setOwnerProfile(profile);
