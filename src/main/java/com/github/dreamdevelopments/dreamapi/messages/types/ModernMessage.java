@@ -90,7 +90,7 @@ public class ModernMessage implements Message {
 
     private Component getModifiedMessage(Player player) {
         if(hasPlaceholders)
-            return ModernMessage.minimessage.deserialize(PAPIHandler.replacePlaceholders(this.rawMessage, player));
+            return ModernMessage.minimessage.deserialize(TextConverter.legacyToModern(PAPIHandler.replacePlaceholders(this.rawMessage, player)));
         return this.message;
     }
 
