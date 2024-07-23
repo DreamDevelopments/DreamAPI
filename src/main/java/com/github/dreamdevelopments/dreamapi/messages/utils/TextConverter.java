@@ -1,7 +1,9 @@
 package com.github.dreamdevelopments.dreamapi.messages.utils;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,11 +58,23 @@ public class TextConverter {
      * @return The string with the color codes replaced
      */
     public static String legacyToModern(String message) {
+        Set<String> matches = new HashSet<>();
+
+        Matcher modernMatcher = modernHexPattern.matcher(message);
+        while(modernMatcher.find())
+            matches.add(modernMatcher.group());
+        for(String match : matches)
+            message = message.replace(match, match.replace("#", "dAPI:HS"));
+
+        matches.clear();
         Matcher matcher = hexPattern.matcher(message);
-        while(matcher.find()) {
-            String hex = matcher.group();
-            message = message.replace(hex, "<" + hex + ">");
-        }
+        while(matcher.find())
+            matches.add(matcher.group());
+        for(String match : matches)
+            message = message.replace(match, "<" + match + ">");
+
+        message = message.replace("dAPI:HS", "#");
+
         for(Map.Entry<String, String> pair : legacyToModern.entrySet()) {
             message = message.replace(pair.getKey(), pair.getValue());
         }
@@ -73,11 +87,14 @@ public class TextConverter {
      * @return The string with the color codes replaced
      */
     public static String modernToLegacy(String message) {
+        Set<String> matches = new HashSet<>();
+
         Matcher matcher = modernHexPattern.matcher(message);
-        while(matcher.find()) {
-            String hex = matcher.group();
+        while(matcher.find())
+            matches.add(matcher.group());
+        for(String hex : matches)
             message = message.replace(hex, "#" + hex.split("#")[1].substring(0, 6));
-        }
+
         for(Map.Entry<String, String> pair : legacyToModern.entrySet()) {
             message = message.replace(pair.getValue(), pair.getKey());
         }
