@@ -235,7 +235,7 @@ public class Metrics {
             if(this.getTime() != null)
                 arguments.put("timestamp", this.getTime());
             if(this.getKey() != null)
-                arguments.put("key", this.getKey());
+                arguments.put("platformKey", this.getKey());
             return arguments;
         }
 
