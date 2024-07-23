@@ -106,13 +106,13 @@ public class MessageTest {
     @Test
     public void testTextConverter() {
         // Test legacy to modern
-        String legacyMessage = "&l&cTest #FFFFFFMessage";
-        String modernMessage = "<bold><red>Test <#FFFFFF>Message";
+        String legacyMessage = "&l&cTest #FFFFFFMessage<#000000> #FFFFFFa#FFFFFFb#FFFFFFc";
+        String modernMessage = "<bold><red>Test <#FFFFFF>Message<#000000> <#FFFFFF>a<#FFFFFF>b<#FFFFFF>c";
         Assertions.assertEquals(modernMessage, TextConverter.legacyToModern(legacyMessage));
 
         // Test modern to legacy
-        legacyMessage = "&l&cTest #FFFFFFMessage#000ab0";
-        modernMessage = "<bold><red>Test</red> <color:#FFFFFF>Message<#000ab0>";
+        legacyMessage = "&l&cTest #FFFFFFMessage#000ab0 #FFFFFF";
+        modernMessage = "<bold><red>Test</red> <color:#FFFFFF>Message<#000ab0> #FFFFFF";
         Assertions.assertEquals(legacyMessage, TextConverter.modernToLegacy(modernMessage));
     }
 
