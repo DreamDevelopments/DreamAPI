@@ -74,7 +74,6 @@ public class TextConverter {
             message = message.replace(match, "<" + match + ">");
 
         message = message.replace("dAPI:HS", "#");
-
         for(Map.Entry<String, String> pair : legacyToModern.entrySet()) {
             message = message.replace(pair.getKey(), pair.getValue());
         }
