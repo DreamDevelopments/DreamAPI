@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
@@ -97,15 +98,25 @@ public final class ItemStackParser extends Parser<ItemStack> {
             else if(config.contains(path + ".texture")){
                 PlayerProfile profile = Bukkit.getServer().createPlayerProfile("CustomHead");
                 PlayerTextures textures = profile.getTextures();
-                String url = config.getString(path + ".texture");
-                assert url != null;
-                try {
-                    textures.setSkin(new URL(url));
-                    skullMeta.setOwnerProfile(profile);
-                } catch (MalformedURLException e) {
-                    Parser.warning(config, path,
-                            "Invalid texture url \"" + url + "\". The texture url must start with \"http://textures.minecraft.net/texture/\"."
-                    );
+                String texture = config.getString(path + ".texture");
+                assert texture != null;
+                String url = null;
+                if(texture.startsWith("http://textures.minecraft.net/texture/"))
+                    url = texture;
+                else if(texture.startsWith("e"))
+                    url = new String(Base64.getDecoder().decode(texture)).split("\"SKIN\":{\"url\":\"")[1].split("\"}")[0];
+                else
+                    Parser.warning(config, path, "Invalid skull texture. Use either a \"http://textures.minecraft.net/texture/\" url or a base64 encoded texture.");
+
+                if(url != null) {
+                    try {
+                        textures.setSkin(new URL(url));
+                        skullMeta.setOwnerProfile(profile);
+                    } catch (MalformedURLException e) {
+                        Parser.warning(config, path,
+                                "Invalid texture url \"" + url + "\". The texture url must start with \"http://textures.minecraft.net/texture/\"."
+                        );
+                    }
                 }
             }
         }
