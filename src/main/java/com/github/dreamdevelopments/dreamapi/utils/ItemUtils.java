@@ -10,10 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Utility class for handling items
@@ -150,6 +147,10 @@ public class ItemUtils {
         }
         newItem.setItemMeta(meta);
         return newItem;
+    }
+
+    public static String getTextureURL(String base64) {
+        return new String(Base64.getDecoder().decode(base64)).split("\"SKIN\":\\{\"url\":\"")[1].split("\"}")[0];
     }
 
 }

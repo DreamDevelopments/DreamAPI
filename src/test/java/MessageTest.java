@@ -3,6 +3,7 @@ import com.github.dreamdevelopments.dreamapi.ServerType;
 import com.github.dreamdevelopments.dreamapi.handlers.PAPIHandler;
 import com.github.dreamdevelopments.dreamapi.messages.Message;
 import com.github.dreamdevelopments.dreamapi.messages.types.ModernMessage;
+import com.github.dreamdevelopments.dreamapi.messages.utils.TextConverter;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -100,6 +101,19 @@ public class MessageTest {
         Assertions.assertTrue(message.concat(" Message", true).equals(result));
 
         Assertions.assertTrue(message.concat(Message.fromText(" Message")).equals(result));
+    }
+
+    @Test
+    public void testTextConverter() {
+        // Test legacy to modern
+        String legacyMessage = "&l&cTest #FFFFFFMessage";
+        String modernMessage = "<bold><red>Test <#FFFFFF>Message";
+        Assertions.assertEquals(modernMessage, TextConverter.legacyToModern(legacyMessage));
+
+        // Test modern to legacy
+        legacyMessage = "&l&cTest #FFFFFFMessage#000ab0";
+        modernMessage = "<bold><red>Test</red> <color:#FFFFFF>Message<#000ab0>";
+        Assertions.assertEquals(legacyMessage, TextConverter.modernToLegacy(modernMessage));
     }
 
 }

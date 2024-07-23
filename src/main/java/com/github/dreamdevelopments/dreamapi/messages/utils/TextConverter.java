@@ -2,6 +2,8 @@ package com.github.dreamdevelopments.dreamapi.messages.utils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Utility class for converting common legacy color codes to MiniMessage and vice versa.
@@ -11,6 +13,10 @@ public class TextConverter {
 
     private final static HashMap<String, String> legacyToModern;
     private final static String[] endTags;
+
+    private final static Pattern hexPattern = Pattern.compile("#[a-fA-F0-9]{6}");
+    private final static Pattern modernHexPattern = Pattern.compile("<(color:)?#[a-fA-F0-9]{6}>");
+
 
     static {
         legacyToModern = new HashMap<>();
@@ -50,6 +56,11 @@ public class TextConverter {
      * @return The string with the color codes replaced
      */
     public static String legacyToModern(String message) {
+        Matcher matcher = hexPattern.matcher(message);
+        while(matcher.find()) {
+            String hex = matcher.group();
+            message = message.replace(hex, "<" + hex + ">");
+        }
         for(Map.Entry<String, String> pair : legacyToModern.entrySet()) {
             message = message.replace(pair.getKey(), pair.getValue());
         }
@@ -62,6 +73,11 @@ public class TextConverter {
      * @return The string with the color codes replaced
      */
     public static String modernToLegacy(String message) {
+        Matcher matcher = modernHexPattern.matcher(message);
+        while(matcher.find()) {
+            String hex = matcher.group();
+            message = message.replace(hex, "#" + hex.split("#")[1].substring(0, 6));
+        }
         for(Map.Entry<String, String> pair : legacyToModern.entrySet()) {
             message = message.replace(pair.getValue(), pair.getKey());
         }

@@ -2,6 +2,7 @@ package com.github.dreamdevelopments.dreamapi.configuration.parsers;
 
 import com.github.dreamdevelopments.dreamapi.configuration.Config;
 import com.github.dreamdevelopments.dreamapi.utils.ColorUtils;
+import com.github.dreamdevelopments.dreamapi.utils.ItemUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -103,8 +104,8 @@ public final class ItemStackParser extends Parser<ItemStack> {
                 String url = null;
                 if(texture.startsWith("http://textures.minecraft.net/texture/"))
                     url = texture;
-                else if(texture.startsWith("e"))
-                    url = new String(Base64.getDecoder().decode(texture)).split("\"SKIN\":{\"url\":\"")[1].split("\"}")[0];
+                else if(texture.startsWith("eyJ"))
+                    url = ItemUtils.getTextureURL(texture);
                 else
                     Parser.warning(config, path, "Invalid skull texture. Use either a \"http://textures.minecraft.net/texture/\" url or a base64 encoded texture.");
 

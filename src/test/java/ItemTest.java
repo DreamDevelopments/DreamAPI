@@ -89,4 +89,12 @@ public class ItemTest {
             Assertions.assertEquals(loreToAdd.getMessage(), newLore.get(1));
         }
     }
+
+    @Test
+    public void testItemUtils() {
+        String base64Texture = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjY3ZjkxYTAyN2I2ZGMwNjQ5ZTc4YTE2YWQ2ZWRiMzVjNTg0ZWVlYzE5M2QwNzRiMmU5NzcwOWFhOWU3ZmNkNiJ9fX0=";
+        String textureURL = "http://textures.minecraft.net/texture/667f91a027b6dc0649e78a16ad6edb35c584eeec193d074b2e97709aa9e7fcd6";
+
+        Assertions.assertEquals(textureURL, ItemUtils.getTextureURL(base64Texture));
+    }
 }
