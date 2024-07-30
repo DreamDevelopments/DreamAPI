@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -86,6 +87,16 @@ public final class ItemStackParser extends Parser<ItemStack> {
         }
         if (config.contains(path + ".custom_model_data")) {
             itemMeta.setCustomModelData(config.getInt(path + ".custom_model_data"));
+        }
+
+        if(config.contains(path + ".item_flags")) {
+            for(String flag : config.getStringList(path + ".item_flags")) {
+                try {
+                    itemMeta.addItemFlags(ItemFlag.valueOf(flag.toUpperCase()));
+                } catch (IllegalArgumentException e) {
+                    Parser.warning(config, path + ".item_flags", "Invalid item flag: " + flag);
+                }
+            }
         }
 
         if (material.equals(Material.PLAYER_HEAD)) {
