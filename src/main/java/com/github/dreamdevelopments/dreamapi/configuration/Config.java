@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * Abstract class that represents a configuration file.
@@ -195,6 +196,16 @@ public abstract class Config extends YamlConfiguration{
     @NotNull
     public Message getMessage(@NotNull String path) {
         return Message.fromText(this.getString(path));
+    }
+
+    /**
+     * Get a list of Messages from the config using the {@link MessageParser}.
+     * @param path The path to the list of Messages to get
+     * @return The requested list
+     */
+    @NotNull
+    public List<Message> getMessageList(@NotNull String path) {
+        return this.getStringList(path).stream().map(Message::fromText).toList();
     }
 
     /**
