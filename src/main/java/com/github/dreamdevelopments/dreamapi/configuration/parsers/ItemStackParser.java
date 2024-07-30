@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerProfile;
 import org.bukkit.profile.PlayerTextures;
@@ -71,6 +72,10 @@ public final class ItemStackParser extends Parser<ItemStack> {
             if (material.toString().contains("LEATHER")) {
                 LeatherArmorMeta leatherMeta = (LeatherArmorMeta) itemMeta;
                 leatherMeta.setColor(ColorUtils.colorFromHex(config.getString(path + ".color")));
+            }
+            else if(material.toString().contains("POTION")) {
+                PotionMeta potionMeta = (PotionMeta) itemMeta;
+                potionMeta.setColor(ColorUtils.colorFromHex(config.getString(path + ".color")));
             }
         }
         if (config.contains(path + ".enchants")) {
