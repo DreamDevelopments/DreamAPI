@@ -1,6 +1,7 @@
 package com.github.dreamdevelopments.dreamapi.configuration.parsers;
 
 import com.github.dreamdevelopments.dreamapi.configuration.Config;
+import com.github.dreamdevelopments.dreamapi.messages.Message;
 import com.github.dreamdevelopments.dreamapi.utils.ColorUtils;
 import com.github.dreamdevelopments.dreamapi.utils.ItemUtils;
 import lombok.Getter;
@@ -61,14 +62,11 @@ public final class ItemStackParser extends Parser<ItemStack> {
         //TODO: Add support for MiniMessages
 
         if (config.contains(path + ".name")) {
-            itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(config.getString(path + ".name"))));
+            ItemUtils.setItemName(itemMeta, config.getMessage(path + ".name"));
         }
         if (config.contains(path + ".lore")) {
-            List<String> lore = config.getStringList(path + ".lore");
-            for (int i = 0; i < lore.size(); i++) {
-                lore.set(i, ChatColor.translateAlternateColorCodes('&', lore.get(i)));
-            }
-            itemMeta.setLore(lore);
+            List<Message> lore = config.getMessageList(path + ".lore");
+            ItemUtils.setItemLore(itemMeta, lore);
         }
         if (config.contains(path + ".color")) {
             if (material.toString().contains("LEATHER")) {
