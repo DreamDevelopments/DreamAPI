@@ -6,7 +6,6 @@ import com.github.dreamdevelopments.dreamapi.utils.ColorUtils;
 import com.github.dreamdevelopments.dreamapi.utils.ItemUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
