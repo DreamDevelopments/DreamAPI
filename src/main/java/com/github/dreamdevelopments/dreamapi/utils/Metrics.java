@@ -19,7 +19,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.sql.Date;
+import java.text.DateFormat;
 import java.time.Duration;
+import java.time.Instant;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -47,6 +51,8 @@ public class Metrics {
 
     private final NamespacedKey namespacedKey;
 
+    private  boolean checkKey;
+
 
     /**
      * Initialize the metrics for the plugin.
@@ -70,13 +76,44 @@ public class Metrics {
         else
             platform = Platform.SPIGOT;
 
-        boolean checkKey = false;
+        checkKey = false;
         try {
             initializeKey();
         } catch(Exception e) {
             plugin.getLogger().log(Level.SEVERE, "There was an error while initializing the metrics for this resource.");
             plugin.getLogger().log(Level.SEVERE, "If the problem persists, please contact us: " + CONTACT);
             e.printStackTrace();
+            checkKey = true;
+        }
+
+        if(checkKey) {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+                long timestamp = Long.parseLong(new String(Base64.getDecoder().decode(key)).split("_")[1]);
+                long currentTime = this.getServerTimeSeconds();
+                if(currentTime > timestamp) {
+                    plugin.getLogger().log(Level.WARNING, "There was an error while initializing the metrics for this resource.");
+                    plugin.getLogger().log(Level.SEVERE, "The license of this resource has expired.");
+                    plugin.getLogger().log(Level.SEVERE, "Make sure you have an internet connection in order to renew the license automatically.");
+                    plugin.getLogger().log(Level.SEVERE, "If the problem persists, please contact us: " + CONTACT);
+                    removeKey();
+                    shutdown();
+                }
+                else if(timestamp-currentTime < 172800) {
+                    DateFormat dateFormat = DateFormat.getDateTimeInstance();
+                    plugin.getLogger().log(Level.WARNING, "There was an error while initializing the metrics for this resource.");
+                    plugin.getLogger().log(Level.WARNING, "This resource's license will expire soon. (" + dateFormat.format(Date.from(Instant.ofEpochSecond(currentTime))));
+                    plugin.getLogger().log(Level.WARNING, "Make sure you have an internet connection in order to renew the license automatically.");
+                    plugin.getLogger().log(Level.WARNING, "If not fixed, the resource might temporarily stop working.");
+                    plugin.getLogger().log(Level.WARNING, "If the problem persists, please contact us: " + CONTACT);
+                }
+                else {
+                    plugin.getLogger().log(Level.WARNING, "There was an error while initializing the metrics for this resource.");
+                    plugin.getLogger().log(Level.WARNING, "This resource's license has expired.");
+                    plugin.getLogger().log(Level.WARNING, "Make sure you have an internet connection in order to renew the license automatically.");
+                    plugin.getLogger().log(Level.WARNING, "If the problem persists, please contact us: " + CONTACT);
+                    shutdown();
+                }
+            }, 60);
         }
     }
 
@@ -111,11 +148,12 @@ public class Metrics {
         JsonObject response = JsonParser.parseString(httpResponse.body()).getAsJsonObject();
         switch (keyStatus) {
             case HttpURLConnection.HTTP_NOT_FOUND: {
-                plugin.getLogger().warning("There was an error while checking the validity of this resource.");
-                plugin.getLogger().warning("This can be caused by unauthorized modifications to the plugin.");
+                plugin.getLogger().warning("There was an error while checking the legitimacy of this resource.");
+                plugin.getLogger().warning("This can be caused by unauthorized modifications of the plugin.");
                 plugin.getLogger().warning("If this is not fixed, the resource might temporarily stop working.");
                 plugin.getLogger().warning("Please try to re-download this plugin from the official source.");
                 plugin.getLogger().warning("If the problem persists, please contact us: " + CONTACT);
+                checkKey = true;
                 break;
             }
             case HttpURLConnection.HTTP_OK: {
@@ -124,6 +162,7 @@ public class Metrics {
                 break;
             }
             case HttpURLConnection.HTTP_NO_CONTENT: {
+                checkKey = true;
                 break;
             }
             case HttpURLConnection.HTTP_FORBIDDEN: {
@@ -193,7 +232,7 @@ public class Metrics {
         try {
             HttpResponse<String> response = sendRequest("https://api.dream-devs.com/v2/time", RequestType.GET);
             return Long.parseLong(response.body());
-        } catch (IOException | InterruptedException ignored) {}
+        } catch (IOException | InterruptedException | NumberFormatException ignored) {}
         return System.currentTimeMillis() / 1000;
     }
 
