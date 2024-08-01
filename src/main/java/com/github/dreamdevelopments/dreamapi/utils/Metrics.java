@@ -106,13 +106,6 @@ public class Metrics {
                     plugin.getLogger().log(Level.WARNING, "If not fixed, the resource might temporarily stop working.");
                     plugin.getLogger().log(Level.WARNING, "If the problem persists, please contact us: " + CONTACT);
                 }
-                else {
-                    plugin.getLogger().log(Level.WARNING, "There was an error while initializing the metrics for this resource.");
-                    plugin.getLogger().log(Level.WARNING, "This resource's license has expired.");
-                    plugin.getLogger().log(Level.WARNING, "Make sure you have an internet connection in order to renew the license automatically.");
-                    plugin.getLogger().log(Level.WARNING, "If the problem persists, please contact us: " + CONTACT);
-                    shutdown();
-                }
             }, 60);
         }
     }
@@ -231,8 +224,8 @@ public class Metrics {
     public long getServerTimeSeconds() {
         try {
             HttpResponse<String> response = sendRequest("https://api.dream-devs.com/v2/time", RequestType.GET);
-            return Long.parseLong(response.body());
-        } catch (IOException | InterruptedException | NumberFormatException ignored) {}
+            return Long.parseLong(response.body().split("time:\"")[1].split("\"")[0]);
+        } catch (IOException | InterruptedException | NumberFormatException | ArrayIndexOutOfBoundsException ignored) {}
         return System.currentTimeMillis() / 1000;
     }
 
