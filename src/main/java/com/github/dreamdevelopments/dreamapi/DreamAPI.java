@@ -2,6 +2,7 @@ package com.github.dreamdevelopments.dreamapi;
 
 import com.github.dreamdevelopments.dreamapi.configuration.parsers.*;
 import com.github.dreamdevelopments.dreamapi.ui.GuiManager;
+import com.github.dreamdevelopments.dreamapi.utils.Metrics;
 import com.github.dreamdevelopments.dreamapi.utils.PacketUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -47,9 +48,12 @@ public final class DreamAPI {
      * @return The new instance of the DreamAPI. If the API has already been initialized, it will return the existing instance.
      */
     public static DreamAPI initialize(@NotNull JavaPlugin plugin, @NotNull String resourceName) {
-        return initialize(plugin, resourceName, true, true, true, true, true);
+        return initialize(plugin, resourceName, true, true, true, true, true, true);
     }
 
+    public static DreamAPI initialize(JavaPlugin plugin, String resourceName, boolean server, boolean handlers, boolean parsers, boolean gui, boolean packets) {
+        return initialize(plugin, resourceName, server, handlers, parsers, gui, packets, false);
+    }
     /**
      * Initialize the DreamAPI.
      * <p>
@@ -64,7 +68,7 @@ public final class DreamAPI {
      * @param packets Whether to initialize the packets API.
      * @return The new instance of the DreamAPI. If the API has already been initialized, it will return the existing instance.
      */
-    public static DreamAPI initialize(JavaPlugin plugin, String resourceName, boolean server, boolean handlers, boolean parsers, boolean gui, boolean packets) {
+    public static DreamAPI initialize(JavaPlugin plugin, String resourceName, boolean server, boolean handlers, boolean parsers, boolean gui, boolean packets, boolean metrics) {
         if(instance == null)
             instance = new DreamAPI();
         instance.plugin = plugin;
@@ -78,6 +82,8 @@ public final class DreamAPI {
             instance.initializeGui(plugin);
         if(packets)
             instance.initializePackets(plugin);
+        if(metrics)
+            instance.initializeMetrics(plugin, resourceName);
         return instance;
     }
     public void initializeServer() {
@@ -109,6 +115,10 @@ public final class DreamAPI {
 
     public void initializeGui(JavaPlugin plugin) {
         GuiManager.initialize(plugin);
+    }
+
+    public void initializeMetrics(JavaPlugin javaPlugin, String resourceName) {
+        new Metrics(plugin, resourceName, true);
     }
 
 }
