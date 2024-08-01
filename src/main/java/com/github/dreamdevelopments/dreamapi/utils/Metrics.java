@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -69,6 +70,7 @@ public class Metrics {
         else
             platform = Platform.SPIGOT;
 
+        boolean checkKey = false;
         try {
             initializeKey();
         } catch(Exception e) {
@@ -82,6 +84,17 @@ public class Metrics {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> Bukkit.getWorlds().forEach(
                 world -> world.getPersistentDataContainer().set(namespacedKey, PersistentDataType.STRING, key)
         ));
+    }
+
+    @Nullable
+    private String getKey() {
+        if(key != null)
+            return key;
+        for(World world : Bukkit.getWorlds()) {
+            if(world.getPersistentDataContainer().has(namespacedKey, PersistentDataType.STRING))
+                return world.getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING);
+        }
+        return null;
     }
 
     private void removeKey() {
@@ -138,6 +151,9 @@ public class Metrics {
         if(key != null) {
             saveKey(key);
         }
+        else {
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> key = getKey());
+        }
     }
 
     /**
@@ -171,6 +187,14 @@ public class Metrics {
             else
                 Bukkit.getPluginManager().disablePlugin(this.plugin);
         }, 20);
+    }
+
+    public long getServerTimeSeconds() {
+        try {
+            HttpResponse<String> response = sendRequest("https://api.dream-devs.com/v2/time", RequestType.GET);
+            return Long.parseLong(response.body());
+        } catch (IOException | InterruptedException ignored) {}
+        return System.currentTimeMillis() / 1000;
     }
 
     /**
