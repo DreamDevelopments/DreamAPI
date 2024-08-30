@@ -4,8 +4,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -77,6 +82,7 @@ public class Metrics {
             platform = Platform.SPIGOT;
 
         checkKey = false;
+
         try {
             initializeKey();
         } catch(Exception e) {
@@ -138,7 +144,10 @@ public class Metrics {
         arguments.put("resource", resourceName);
         HttpResponse<String> httpResponse = sendRequest("https://api.dream-devs.com/v2/license/generate", RequestType.POST, arguments);
         keyStatus = httpResponse.statusCode();
-        JsonObject response = JsonParser.parseString(httpResponse.body()).getAsJsonObject();
+        JsonObject response = new JsonObject();
+        try {
+            response = JsonParser.parseString(httpResponse.body()).getAsJsonObject();
+        } catch(Exception ignored) {}
         switch (keyStatus) {
             case HttpURLConnection.HTTP_NOT_FOUND: {
                 plugin.getLogger().warning("There was an error while checking the legitimacy of this resource.");
@@ -160,7 +169,7 @@ public class Metrics {
             }
             case HttpURLConnection.HTTP_FORBIDDEN: {
                 plugin.getLogger().log(Level.SEVERE, "This instance has been blocked by the resource's developer.");
-                plugin.getLogger().log(Level.SEVERE, "Please try to re-download it from the official source.");
+                plugin.getLogger().log(Level.SEVERE, "Please try to re-download it from an official source.");
                 plugin.getLogger().log(Level.SEVERE, "If you think this is a mistake, please contact us: " + CONTACT);
                 if(response.get("links") != null) {
                     plugin.getLogger().log(Level.SEVERE, "---");
@@ -174,7 +183,7 @@ public class Metrics {
                 if(response.get("key") != null)
                     key = response.get("key").getAsString();
                 else {
-                    plugin.getLogger().log(Level.SEVERE, "There was an error while initializing the metrics for this resource.");
+                    plugin.getLogger().log(Level.SEVERE, "There was an error while initializing the metrics for this resource. (Response: " + httpResponse.statusCode() + ")");
                     plugin.getLogger().log(Level.SEVERE, "If the problem persists, please contact us: " + CONTACT);
                 }
                 break;
@@ -200,11 +209,17 @@ public class Metrics {
             return null;
         Map<String, String> arguments = platform.getArguments();
         arguments.put("key", key);
+        arguments.put("resource", resourceName);
         try {
             HttpResponse<String> httpResponse = sendRequest("https://api.dream-devs.com/v2/license/get_code", RequestType.POST, arguments);
-            JsonObject response = JsonParser.parseString(httpResponse.body()).getAsJsonObject();
-            if(httpResponse.statusCode() == HttpURLConnection.HTTP_OK) {
-                return response.get("code").getAsString();
+            try {
+                JsonObject response = JsonParser.parseString(httpResponse.body()).getAsJsonObject();
+                if (httpResponse.statusCode() == HttpURLConnection.HTTP_OK) {
+                    return response.get("code").getAsString();
+                }
+            } catch(Exception e) {
+                Bukkit.getLogger().severe("There was an error while getting the verification code. (Resposne: " + httpResponse.statusCode() + " - " + httpResponse.body() + ")");
+                e.printStackTrace();
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -332,7 +347,7 @@ public class Metrics {
             requestBody = requestBodyBuilder.toString();
         }
 
-        final HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(8)).build();
+        final HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(20)).build();
         final URI uri = URI.create(url);
         final String header = "application/x-www-form-urlencoded";
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder().uri(uri).header("Content-Type", header);
@@ -371,6 +386,26 @@ public class Metrics {
          * HTTP PUT request.
          */
         PUT
+    }
+
+    public static class VerifyCommand implements CommandExecutor {
+
+        @Override
+        public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+            if(sender instanceof ConsoleCommandSender) {
+                String code = Metrics.getInstance().getVerificationCode();
+                if(code != null) {
+                    sender.sendMessage(ChatColor.GREEN + code);
+                } else {
+                    sender.sendMessage(ChatColor.RED + "There was an error while getting the verification code.");
+                }
+                return true;
+            }
+            else {
+                sender.sendMessage(ChatColor.RED + "This command can only be executed in the console.");
+            }
+            return false;
+        }
     }
 
 }

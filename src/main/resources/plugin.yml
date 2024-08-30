@@ -3,3 +3,6 @@ version: '${version}'
 main: com.github.dreamdevelopments.dreamapi.DreamAPIPlugin
 api-version: '1.13'
 softdepend: [ProtocolLib]
+commands:
+  verify:
+    description: Verify your purchase
