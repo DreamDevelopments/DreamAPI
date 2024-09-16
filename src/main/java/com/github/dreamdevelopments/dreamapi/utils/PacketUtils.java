@@ -5,6 +5,9 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.*;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.github.dreamdevelopments.dreamapi.messages.Message;
+import com.github.dreamdevelopments.dreamapi.messages.types.LegacyMessage;
+import com.github.dreamdevelopments.dreamapi.messages.types.ModernMessage;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -84,10 +87,7 @@ public class PacketUtils {
     }
 
     public static void updateTitlePlaceholders(Player player, HashMap<String, String> placeholders) {
-        final InventoryType type = player.getOpenInventory().getType();
-        if (type == InventoryType.CRAFTING || type == InventoryType.CREATIVE)
-            return;
-        InventoryPlayer inventoryPlayer = PacketUtils.getInstance().playerInventories.getOrDefault(player.getUniqueId(), null);
+        InventoryPlayer inventoryPlayer = getInventoryPlayer(player);
         if (inventoryPlayer == null)
             return;
         final int windowId = inventoryPlayer.windowId();
@@ -101,17 +101,66 @@ public class PacketUtils {
         }
         PacketUtils.getInstance().sendOpenScreenPacket(player, windowId, windowType, titleJson);
         player.updateInventory();
-
     }
 
+    public static void setInventoryTitle(Player player, String titleJson) {
+        InventoryPlayer inventoryPlayer = getInventoryPlayer(player);
+        if (inventoryPlayer == null)
+            return;
+        final int windowId = inventoryPlayer.windowId();
+        if(windowId == 0)
+            return;
+        final Object windowType = inventoryPlayer.containerType();
+        PacketUtils.getInstance().sendOpenScreenPacket(player, windowId, windowType, titleJson);
+        player.updateInventory();
+    }
+    
+    public static void setInventoryTitle(Player player, Message message) {
+        WrappedChatComponent component = switch (message.getType()) {
+            case MODERN -> WrappedChatComponent.fromJson(((ModernMessage) message).getMessage().toString());
+            case LEGACY -> WrappedChatComponent.fromLegacyText(((LegacyMessage) message).getMessage().toString());
+            default -> WrappedChatComponent.fromJson("");
+        };
+        InventoryPlayer inventoryPlayer = getInventoryPlayer(player);
+        if (inventoryPlayer == null)
+            return;
+        final int windowId = inventoryPlayer.windowId();
+        if(windowId == 0)
+            return;
+        final Object windowType = inventoryPlayer.containerType();
+        PacketUtils.getInstance().sendOpenScreenPacket(player, windowId, windowType, component);
+        player.updateInventory();
+    }
+    
+    public static String getInventoryTitle(Player player) {
+        InventoryPlayer inventoryPlayer = getInventoryPlayer(player);
+        if (inventoryPlayer == null)
+            return null;
+        final int windowId = inventoryPlayer.windowId();
+        if(windowId == 0)
+            return null;
+        final Object windowType = inventoryPlayer.containerType();
+        String titleJson = inventoryPlayer.originalTitle();
+        return titleJson;
+    }
+
+    private static InventoryPlayer getInventoryPlayer(Player player) {
+        final InventoryType type = player.getOpenInventory().getType();
+        if (type == InventoryType.CRAFTING || type == InventoryType.CREATIVE)
+            return null;
+        return PacketUtils.getInstance().playerInventories.getOrDefault(player.getUniqueId(), null);
+    }
 
     private void sendOpenScreenPacket(Player player, int windowId, Object windowType, String titleJson) {
-        final WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(titleJson);
+        sendOpenScreenPacket(player, windowId, windowType, WrappedChatComponent.fromJson(titleJson));
+    }
+
+    private void sendOpenScreenPacket(Player player, int windowId, Object windowType, WrappedChatComponent title) {
 
         PacketContainer openScreen = new PacketContainer(PacketType.Play.Server.OPEN_WINDOW);
         openScreen.getIntegers().write(0, windowId);
         openScreen.getStructures().write(0, (InternalStructure) windowType);
-        openScreen.getChatComponents().write(0, wrappedChatComponent);
+        openScreen.getChatComponents().write(0, title);
 
         try {
             protocolManager.sendServerPacket(player, openScreen);
