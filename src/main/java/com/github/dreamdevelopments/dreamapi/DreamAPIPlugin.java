@@ -16,10 +16,15 @@ import java.util.Objects;
 public class DreamAPIPlugin extends JavaPlugin {
 
     @Getter
+    private static DreamAPIPlugin instance;
+
+    @Getter
     private MainConfig mainConfig;
 
     @Override
     public void onEnable() {
+        instance = this;
+
         mainConfig = new MainConfig(this, "config.yml");
         DreamAPI.initialize(this, mainConfig.implementation);
         try {
