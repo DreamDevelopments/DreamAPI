@@ -4,7 +4,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
+import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +24,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.sql.Date;
+import java.text.DateFormat;
 import java.time.Duration;
+import java.time.Instant;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -46,6 +56,8 @@ public class Metrics {
 
     private final NamespacedKey namespacedKey;
 
+    private  boolean checkKey;
+
 
     /**
      * Initialize the metrics for the plugin.
@@ -69,12 +81,38 @@ public class Metrics {
         else
             platform = Platform.SPIGOT;
 
+        checkKey = false;
+
         try {
             initializeKey();
         } catch(Exception e) {
             plugin.getLogger().log(Level.SEVERE, "There was an error while initializing the metrics for this resource.");
             plugin.getLogger().log(Level.SEVERE, "If the problem persists, please contact us: " + CONTACT);
             e.printStackTrace();
+            checkKey = true;
+        }
+
+        if(checkKey) {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+                long timestamp = Long.parseLong(new String(Base64.getDecoder().decode(key)).split("_")[1]);
+                long currentTime = this.getServerTimeSeconds();
+                if(currentTime > timestamp) {
+                    plugin.getLogger().log(Level.WARNING, "There was an error while initializing the metrics for this resource.");
+                    plugin.getLogger().log(Level.SEVERE, "The license of this resource has expired.");
+                    plugin.getLogger().log(Level.SEVERE, "Make sure you have an internet connection in order to renew the license automatically.");
+                    plugin.getLogger().log(Level.SEVERE, "If the problem persists, please contact us: " + CONTACT);
+                    removeKey();
+                    shutdown();
+                }
+                else if(timestamp-currentTime < 172800) {
+                    DateFormat dateFormat = DateFormat.getDateTimeInstance();
+                    plugin.getLogger().log(Level.WARNING, "There was an error while initializing the metrics for this resource.");
+                    plugin.getLogger().log(Level.WARNING, "This resource's license will expire soon. (" + dateFormat.format(Date.from(Instant.ofEpochSecond(currentTime))));
+                    plugin.getLogger().log(Level.WARNING, "Make sure you have an internet connection in order to renew the license automatically.");
+                    plugin.getLogger().log(Level.WARNING, "If not fixed, the resource might temporarily stop working.");
+                    plugin.getLogger().log(Level.WARNING, "If the problem persists, please contact us: " + CONTACT);
+                }
+            }, 60);
         }
     }
 
@@ -82,6 +120,17 @@ public class Metrics {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> Bukkit.getWorlds().forEach(
                 world -> world.getPersistentDataContainer().set(namespacedKey, PersistentDataType.STRING, key)
         ));
+    }
+
+    @Nullable
+    private String getKey() {
+        if(key != null)
+            return key;
+        for(World world : Bukkit.getWorlds()) {
+            if(world.getPersistentDataContainer().has(namespacedKey, PersistentDataType.STRING))
+                return world.getPersistentDataContainer().get(namespacedKey, PersistentDataType.STRING);
+        }
+        return null;
     }
 
     private void removeKey() {
@@ -95,14 +144,18 @@ public class Metrics {
         arguments.put("resource", resourceName);
         HttpResponse<String> httpResponse = sendRequest("https://api.dream-devs.com/v2/license/generate", RequestType.POST, arguments);
         keyStatus = httpResponse.statusCode();
-        JsonObject response = JsonParser.parseString(httpResponse.body()).getAsJsonObject();
+        JsonObject response = new JsonObject();
+        try {
+            response = JsonParser.parseString(httpResponse.body()).getAsJsonObject();
+        } catch(Exception ignored) {}
         switch (keyStatus) {
             case HttpURLConnection.HTTP_NOT_FOUND: {
-                plugin.getLogger().warning("There was an error while checking the validity of this resource.");
-                plugin.getLogger().warning("This can be caused by unauthorized modifications to the plugin.");
+                plugin.getLogger().warning("There was an error while checking the legitimacy of this resource.");
+                plugin.getLogger().warning("This can be caused by unauthorized modifications of the plugin.");
                 plugin.getLogger().warning("If this is not fixed, the resource might temporarily stop working.");
                 plugin.getLogger().warning("Please try to re-download this plugin from the official source.");
                 plugin.getLogger().warning("If the problem persists, please contact us: " + CONTACT);
+                checkKey = true;
                 break;
             }
             case HttpURLConnection.HTTP_OK: {
@@ -111,11 +164,12 @@ public class Metrics {
                 break;
             }
             case HttpURLConnection.HTTP_NO_CONTENT: {
+                checkKey = true;
                 break;
             }
             case HttpURLConnection.HTTP_FORBIDDEN: {
                 plugin.getLogger().log(Level.SEVERE, "This instance has been blocked by the resource's developer.");
-                plugin.getLogger().log(Level.SEVERE, "Please try to re-download it from the official source.");
+                plugin.getLogger().log(Level.SEVERE, "Please try to re-download it from an official source.");
                 plugin.getLogger().log(Level.SEVERE, "If you think this is a mistake, please contact us: " + CONTACT);
                 if(response.get("links") != null) {
                     plugin.getLogger().log(Level.SEVERE, "---");
@@ -129,7 +183,7 @@ public class Metrics {
                 if(response.get("key") != null)
                     key = response.get("key").getAsString();
                 else {
-                    plugin.getLogger().log(Level.SEVERE, "There was an error while initializing the metrics for this resource.");
+                    plugin.getLogger().log(Level.SEVERE, "There was an error while initializing the metrics for this resource. (Response: " + httpResponse.statusCode() + ")");
                     plugin.getLogger().log(Level.SEVERE, "If the problem persists, please contact us: " + CONTACT);
                 }
                 break;
@@ -137,6 +191,9 @@ public class Metrics {
         }
         if(key != null) {
             saveKey(key);
+        }
+        else {
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> key = getKey());
         }
     }
 
@@ -152,11 +209,17 @@ public class Metrics {
             return null;
         Map<String, String> arguments = platform.getArguments();
         arguments.put("key", key);
+        arguments.put("resource", resourceName);
         try {
             HttpResponse<String> httpResponse = sendRequest("https://api.dream-devs.com/v2/license/get_code", RequestType.POST, arguments);
-            JsonObject response = JsonParser.parseString(httpResponse.body()).getAsJsonObject();
-            if(httpResponse.statusCode() == HttpURLConnection.HTTP_OK) {
-                return response.get("code").getAsString();
+            try {
+                JsonObject response = JsonParser.parseString(httpResponse.body()).getAsJsonObject();
+                if (httpResponse.statusCode() == HttpURLConnection.HTTP_OK) {
+                    return response.get("code").getAsString();
+                }
+            } catch(Exception e) {
+                Bukkit.getLogger().severe("There was an error while getting the verification code. (Resposne: " + httpResponse.statusCode() + " - " + httpResponse.body() + ")");
+                e.printStackTrace();
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -171,6 +234,14 @@ public class Metrics {
             else
                 Bukkit.getPluginManager().disablePlugin(this.plugin);
         }, 20);
+    }
+
+    public long getServerTimeSeconds() {
+        try {
+            HttpResponse<String> response = sendRequest("https://api.dream-devs.com/v2/time", RequestType.GET);
+            return Long.parseLong(response.body().split("time:\"")[1].split("\"")[0]);
+        } catch (IOException | InterruptedException | NumberFormatException | ArrayIndexOutOfBoundsException ignored) {}
+        return System.currentTimeMillis() / 1000;
     }
 
     /**
@@ -276,7 +347,7 @@ public class Metrics {
             requestBody = requestBodyBuilder.toString();
         }
 
-        final HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(8)).build();
+        final HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(20)).build();
         final URI uri = URI.create(url);
         final String header = "application/x-www-form-urlencoded";
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder().uri(uri).header("Content-Type", header);
@@ -315,6 +386,26 @@ public class Metrics {
          * HTTP PUT request.
          */
         PUT
+    }
+
+    public static class VerifyCommand implements CommandExecutor {
+
+        @Override
+        public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+            if(sender instanceof ConsoleCommandSender) {
+                String code = Metrics.getInstance().getVerificationCode();
+                if(code != null) {
+                    sender.sendMessage(ChatColor.GREEN + code);
+                } else {
+                    sender.sendMessage(ChatColor.RED + "There was an error while getting the verification code.");
+                }
+                return true;
+            }
+            else {
+                sender.sendMessage(ChatColor.RED + "This command can only be executed in the console.");
+            }
+            return false;
+        }
     }
 
 }

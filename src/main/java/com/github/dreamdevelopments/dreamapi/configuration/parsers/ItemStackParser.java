@@ -1,17 +1,19 @@
 package com.github.dreamdevelopments.dreamapi.configuration.parsers;
 
 import com.github.dreamdevelopments.dreamapi.configuration.Config;
+import com.github.dreamdevelopments.dreamapi.messages.Message;
 import com.github.dreamdevelopments.dreamapi.utils.ColorUtils;
 import com.github.dreamdevelopments.dreamapi.utils.ItemUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerProfile;
 import org.bukkit.profile.PlayerTextures;
@@ -19,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
@@ -61,19 +62,20 @@ public final class ItemStackParser extends Parser<ItemStack> {
         //TODO: Add support for MiniMessages
 
         if (config.contains(path + ".name")) {
-            itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(config.getString(path + ".name"))));
+            ItemUtils.setItemName(itemMeta, config.getMessage(path + ".name"));
         }
         if (config.contains(path + ".lore")) {
-            List<String> lore = config.getStringList(path + ".lore");
-            for (int i = 0; i < lore.size(); i++) {
-                lore.set(i, ChatColor.translateAlternateColorCodes('&', lore.get(i)));
-            }
-            itemMeta.setLore(lore);
+            List<Message> lore = config.getMessageList(path + ".lore");
+            ItemUtils.setItemLore(itemMeta, lore);
         }
         if (config.contains(path + ".color")) {
             if (material.toString().contains("LEATHER")) {
                 LeatherArmorMeta leatherMeta = (LeatherArmorMeta) itemMeta;
                 leatherMeta.setColor(ColorUtils.colorFromHex(config.getString(path + ".color")));
+            }
+            else if(material.toString().contains("POTION")) {
+                PotionMeta potionMeta = (PotionMeta) itemMeta;
+                potionMeta.setColor(ColorUtils.colorFromHex(config.getString(path + ".color")));
             }
         }
         if (config.contains(path + ".enchants")) {
@@ -88,6 +90,16 @@ public final class ItemStackParser extends Parser<ItemStack> {
         }
         if (config.contains(path + ".custom_model_data")) {
             itemMeta.setCustomModelData(config.getInt(path + ".custom_model_data"));
+        }
+
+        if(config.contains(path + ".item_flags")) {
+            for(String flag : config.getStringList(path + ".item_flags")) {
+                try {
+                    itemMeta.addItemFlags(ItemFlag.valueOf(flag.toUpperCase()));
+                } catch (IllegalArgumentException e) {
+                    Parser.warning(config, path + ".item_flags", "Invalid item flag: " + flag);
+                }
+            }
         }
 
         if (material.equals(Material.PLAYER_HEAD)) {
