@@ -162,11 +162,7 @@ public class PacketUtils {
         openScreen.getStructures().write(0, (InternalStructure) windowType);
         openScreen.getChatComponents().write(0, title);
 
-        try {
-            protocolManager.sendServerPacket(player, openScreen);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        fprotocolManager.sendServerPacket(player, openScreen);
     }
 
     record InventoryPlayer(int windowId, Object containerType, String originalTitle) { }
