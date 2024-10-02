@@ -35,10 +35,13 @@ public class DreamAPIPlugin extends JavaPlugin {
     }
 
     @Getter
-    private static class MainConfig extends Config {
+    public static class MainConfig extends Config {
 
-        @ConfigValue("implementation")
-        private String implementation = "custom";
+        //@ConfigValue("implementation")
+        private String implementation = "godsurv";
+
+        @ConfigValue("invisible-inventory-title")
+        private String invisibleInventoryTitle;
 
         public MainConfig(@NotNull JavaPlugin plugin, @NotNull String fileName) {
             super(plugin, fileName);
