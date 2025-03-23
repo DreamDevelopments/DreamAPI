@@ -1,5 +1,6 @@
 package com.github.dreamdevelopments.dreamapi.ui;
 
+import com.github.dreamdevelopments.dreamapi.DreamAPI;
 import com.github.dreamdevelopments.dreamapi.ui.elements.Button;
 import com.github.dreamdevelopments.dreamapi.utils.PacketUtils;
 import lombok.Getter;
@@ -84,7 +85,7 @@ public abstract class Gui {
     }
 
     public void updateTitle() {
-        if(PacketUtils.isEnabled()) {
+        if(DreamAPI.getInstance().isProtocolLibEnabled()) {
             PacketUtils.updateTitlePlaceholders(this.player, this.placeholders);
         }
         else {

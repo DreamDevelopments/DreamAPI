@@ -10,15 +10,21 @@ import com.github.dreamdevelopments.dreamapi.DreamAPIPlugin;
 import com.github.dreamdevelopments.dreamapi.messages.Message;
 import com.github.dreamdevelopments.dreamapi.messages.types.LegacyMessage;
 import com.github.dreamdevelopments.dreamapi.messages.types.ModernMessage;
+import com.github.dreamdevelopments.dreamapi.ui.Gui;
+import com.github.dreamdevelopments.dreamapi.ui.GuiManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,6 +78,7 @@ public class PacketUtils {
         inventoryClearPacket.getItemModifier().write(0, new ItemStack(Material.AIR));
 
         this.registerPacketListeners();
+        plugin.getServer().getPluginManager().registerEvents(new PacketGuiListener(), (Plugin)plugin);
     }
 
     public void registerPacketListeners() {
@@ -276,5 +283,15 @@ public class PacketUtils {
 
     record InventoryData(int size, long time) { }
 
-
+    public static final class PacketGuiListener implements Listener {
+        @EventHandler
+        public void onInventoryClose(InventoryCloseEvent event) {
+            if (PacketUtils.getInstance().getHiddenInventoriesPlayers().containsKey(event.getPlayer().getUniqueId()))
+                PacketUtils.restorePlayerInventory((Player)event.getPlayer());
+            PacketUtils.getInstance().getPlayerInventories().remove(event.getPlayer().getUniqueId());
+            Gui gui = (Gui) GuiManager.getInstance().getOpenInventories().get(event.getPlayer());
+            if (gui != null)
+                gui.close(event);
+        }
+    }
 }

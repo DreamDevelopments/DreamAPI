@@ -33,6 +33,8 @@ public final class DreamAPI {
 
     private boolean placeholderAPIEnabled;
 
+    private boolean protocolLibEnabled;
+
     private JavaPlugin plugin;
 
     private String resourceName;
@@ -98,6 +100,8 @@ public final class DreamAPI {
 
     public void initializeHandlers() {
         instance.placeholderAPIEnabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
+        instance.placeholderAPIEnabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
+
     }
 
     public void initializeParsers() {
@@ -110,6 +114,9 @@ public final class DreamAPI {
     }
 
     public void initializePackets(JavaPlugin plugin) {
+        protocolLibEnabled = Bukkit.getPluginManager().isPluginEnabled("ProtocolLib");
+        if (!this.protocolLibEnabled)
+            return;
         new PacketUtils(plugin);
     }
 
