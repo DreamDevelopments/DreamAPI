@@ -2,6 +2,7 @@ package com.github.dreamdevelopments.dreamapi;
 
 import com.github.dreamdevelopments.dreamapi.configuration.parsers.*;
 import com.github.dreamdevelopments.dreamapi.ui.GuiManager;
+import com.github.dreamdevelopments.dreamapi.utils.GeyserUtils;
 import com.github.dreamdevelopments.dreamapi.utils.Metrics;
 import com.github.dreamdevelopments.dreamapi.utils.PacketUtils;
 import lombok.Getter;
@@ -100,8 +101,7 @@ public final class DreamAPI {
 
     public void initializeHandlers() {
         instance.placeholderAPIEnabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
-        instance.placeholderAPIEnabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
-
+        new GeyserUtils();
     }
 
     public void initializeParsers() {
