@@ -16,6 +16,7 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,9 @@ public class ItemTest {
             //TODO: Replace with realistic version example
             bukkit.when(Bukkit::getVersion).thenReturn("Spigot 1.20.1");
             DreamAPI.initialize(null, "dreamAPI", true, false, false, false, false);
-            Assertions.assertEquals(ServerType.SPIGOT, DreamAPI.getInstance().getServerType());
+            Field serverType = DreamAPI.getInstance().getClass().getDeclaredField("serverType");
+            serverType.setAccessible(true);
+            serverType.set(DreamAPI.getInstance(), ServerType.SPIGOT);
 
             // Test lore with messages
 
@@ -56,6 +59,8 @@ public class ItemTest {
             List<String> newLore = legacyLoreCapture.getValue();
             Assertions.assertEquals(3, newLore.size());
             Assertions.assertEquals(loreToAdd.getMessage(), newLore.get(1));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 

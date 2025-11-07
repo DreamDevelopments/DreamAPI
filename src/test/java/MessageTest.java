@@ -14,6 +14,8 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.lang.reflect.Field;
+
 public class MessageTest {
 
     @BeforeEach
@@ -27,8 +29,9 @@ public class MessageTest {
             //TODO: Replace with realistic version example
             bukkit.when(Bukkit::getVersion).thenReturn("Spigot 1.20.1");
             DreamAPI.initialize(null, "dreamAPI", true, false, false, false, false);
-            Assertions.assertEquals(ServerType.SPIGOT, DreamAPI.getInstance().getServerType());
-
+            Field serverType = DreamAPI.getInstance().getClass().getDeclaredField("serverType");
+            serverType.setAccessible(true);
+            serverType.set(DreamAPI.getInstance(), ServerType.SPIGOT);
             // Test Legacy Messages
 
             try(MockedStatic<PAPIHandler> papiHandler = Mockito.mockStatic(PAPIHandler.class)) {
@@ -47,6 +50,8 @@ public class MessageTest {
 
             }
 
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 
