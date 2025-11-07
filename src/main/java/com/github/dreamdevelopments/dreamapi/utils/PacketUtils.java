@@ -270,7 +270,16 @@ public class PacketUtils {
             public void onPacketReceiving(PacketEvent event) {
                 if (!hiddenInventoriesPlayers.containsKey(event.getPlayer().getUniqueId()))
                     return;
-                if ((Integer) event.getPacket().getIntegers().getValues().get(2) >= hiddenInventoriesPlayers.get(event.getPlayer().getUniqueId()).size) {
+                int slot = -1;
+                // Older versions
+                if(event.getPacket().getIntegers().getValues().size() > 2)
+                    slot = event.getPacket().getIntegers().getValues().get(2);
+
+                // Newer versions
+                else
+                    slot = event.getPacket().getShorts().getValues().get(0);
+
+                if (slot >= hiddenInventoriesPlayers.get(event.getPlayer().getUniqueId()).size) {
                     event.setCancelled(true);
                     sendInventoryClearPacket(event.getPlayer());
                 }
