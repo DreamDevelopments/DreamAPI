@@ -90,13 +90,14 @@ public final class DreamAPI {
         return instance;
     }
     public void initializeServer() {
-        for(ServerType serverType : ServerType.values()) {
-            if(Bukkit.getVersion().toLowerCase().contains(serverType.getName())) {
-                instance.serverType = serverType;
-            }
+        try {
+            Class.forName("net.kyori.adventure.text.minimessage.MiniMessage");
+            instance.serverType = ServerType.PAPER;
+        } catch(ClassNotFoundException error) {
+            instance.serverType = ServerType.SPIGOT;
         }
         if(instance.serverType == null)
-            instance.serverType = ServerType.PAPER;
+            instance.serverType = ServerType.SPIGOT;
     }
 
     public void initializeHandlers() {
