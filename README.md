@@ -30,7 +30,7 @@ You can import DreamAPI using Maven or Gradle
   <dependency>
     <groupId>com.github.DreamDevelopments</groupId>
     <artifactId>DreamAPI</artifactId>
-    <version>0.2.3</version>
+    <version>0.2.4</version>
   </dependency>
 
 </dependencies>
@@ -47,7 +47,7 @@ repositories {
 
 dependencies {
 
-  implementation 'com.github.DreamDevelopments:DreamAPI:0.2.3'
+  implementation 'com.github.DreamDevelopments:DreamAPI:0.2.4'
 
 }
 ```
