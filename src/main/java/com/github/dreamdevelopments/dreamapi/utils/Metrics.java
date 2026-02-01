@@ -218,7 +218,7 @@ public class Metrics {
                     return response.get("code").getAsString();
                 }
             } catch(Exception e) {
-                Bukkit.getLogger().severe("There was an error while getting the verification code. (Resposne: " + httpResponse.statusCode() + " - " + httpResponse.body() + ")");
+                Bukkit.getLogger().severe("There was an error while getting the verification code. (Response: " + httpResponse.statusCode() + " - " + httpResponse.body() + ")");
                 e.printStackTrace();
             }
         } catch (IOException | InterruptedException e) {
