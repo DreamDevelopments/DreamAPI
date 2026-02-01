@@ -39,6 +39,11 @@ public record GuiItem(ItemStack item, int[] slots) {
             inventory.setItem(slot, newItem);
     }
 
+    /**
+     * Check if a slot corresponds to this GuiItem.
+     * @param slot The slot
+     * @return True if the slot is part of this GuiItem, false otherwise.
+     */
     public boolean isClicked(int slot) {
         for(int itemSlot : this.slots)
             if(itemSlot == slot)

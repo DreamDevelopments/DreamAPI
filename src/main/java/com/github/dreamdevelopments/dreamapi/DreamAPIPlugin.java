@@ -34,6 +34,9 @@ public class DreamAPIPlugin extends JavaPlugin {
         }
     }
 
+    /**
+     * The main configuration for the DreamAPI plugin.
+     */
     @Getter
     public static class MainConfig extends Config {
 
@@ -43,6 +46,11 @@ public class DreamAPIPlugin extends JavaPlugin {
         @ConfigValue("invisible-inventory-title")
         private String invisibleInventoryTitle;
 
+        /**
+         * Creates and loads the main config.
+         * @param plugin The plugin that uses this config
+         * @param fileName The path to the config file. It will be saved in the plugin's data folder.
+         */
         public MainConfig(@NotNull JavaPlugin plugin, @NotNull String fileName) {
             super(plugin, fileName);
         }

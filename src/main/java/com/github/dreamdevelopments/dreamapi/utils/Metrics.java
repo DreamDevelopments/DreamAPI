@@ -236,6 +236,11 @@ public class Metrics {
         }, 20);
     }
 
+    /**
+     * Get the current server time in seconds from the Licensing server.
+     * This is used to prevent time manipulation when checking license expiration.
+     * @return The current server time in seconds
+     */
     public long getServerTimeSeconds() {
         try {
             HttpResponse<String> response = sendRequest("https://api.dream-devs.com/v2/time", RequestType.GET);
@@ -388,6 +393,9 @@ public class Metrics {
         PUT
     }
 
+    /**
+     * Command that allows purchase verification in discord through a verification code from DreamLicense.
+     */
     public static class VerifyCommand implements CommandExecutor {
 
         @Override

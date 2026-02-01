@@ -54,6 +54,20 @@ public final class DreamAPI {
         return initialize(plugin, resourceName, true, true, true, true, true, true);
     }
 
+    /**
+     * Initialize the DreamAPI.
+     * <p>
+     * This will enable the features of the API that are set to true.
+     *
+     * @param plugin The plugin that uses the API.
+     * @param resourceName The name of the resource that uses the API. It is used for display and metrics.
+     * @param server Whether to initialize the server type.
+     * @param handlers Whether to initialize the PlaceholderAPI handlers.
+     * @param parsers Whether to initialize the parsers.
+     * @param gui Whether to initialize the GUI API.
+     * @param packets Whether to initialize the packets API.
+     * @return The new instance of the DreamAPI. If the API has already been initialized, it will return the existing instance.
+     */
     public static DreamAPI initialize(JavaPlugin plugin, String resourceName, boolean server, boolean handlers, boolean parsers, boolean gui, boolean packets) {
         return initialize(plugin, resourceName, server, handlers, parsers, gui, packets, false);
     }
@@ -69,6 +83,7 @@ public final class DreamAPI {
      * @param parsers Whether to initialize the parsers.
      * @param gui Whether to initialize the GUI API.
      * @param packets Whether to initialize the packets API.
+     * @param metrics Whether to initialize the metrics used for license verification.
      * @return The new instance of the DreamAPI. If the API has already been initialized, it will return the existing instance.
      */
     public static DreamAPI initialize(JavaPlugin plugin, String resourceName, boolean server, boolean handlers, boolean parsers, boolean gui, boolean packets, boolean metrics) {
@@ -89,7 +104,8 @@ public final class DreamAPI {
             instance.initializeMetrics(plugin, resourceName);
         return instance;
     }
-    public void initializeServer() {
+
+    private void initializeServer() {
         try {
             Class.forName("net.kyori.adventure.text.minimessage.MiniMessage");
             instance.serverType = ServerType.PAPER;
@@ -100,12 +116,12 @@ public final class DreamAPI {
             instance.serverType = ServerType.SPIGOT;
     }
 
-    public void initializeHandlers() {
+    private void initializeHandlers() {
         instance.placeholderAPIEnabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
         new GeyserUtils();
     }
 
-    public void initializeParsers() {
+    private void initializeParsers() {
         new CustomSoundParser();
         new GuiItemParser();
         new GuiTypeParser();
@@ -114,18 +130,18 @@ public final class DreamAPI {
         new MessageParser();
     }
 
-    public void initializePackets(JavaPlugin plugin) {
+    private void initializePackets(JavaPlugin plugin) {
         protocolLibEnabled = Bukkit.getPluginManager().isPluginEnabled("ProtocolLib");
         if (!this.protocolLibEnabled)
             return;
         new PacketUtils(plugin);
     }
 
-    public void initializeGui(JavaPlugin plugin) {
+    private void initializeGui(JavaPlugin plugin) {
         GuiManager.initialize(plugin);
     }
 
-    public void initializeMetrics(JavaPlugin javaPlugin, String resourceName) {
+    private void initializeMetrics(JavaPlugin javaPlugin, String resourceName) {
         new Metrics(plugin, resourceName, true);
     }
 

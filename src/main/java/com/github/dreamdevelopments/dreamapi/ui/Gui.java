@@ -14,17 +14,35 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Represents an instance of a GUI inventory.
+ * Allows for easily creating and managing custom inventories.
+ * Supports buttons and custom placeholders.
+ * <p>
+ * Only one player should have this GUI open at a time.
+ * <p>
+ * Uses {@link GuiType} for the layout and behavior of the GUI.
+ */
 @Getter
 public abstract class Gui {
 
+    /** The minecraft inventory associated with this GUI. */
     @Setter
     protected Inventory inventory;
+
+    /** The title of the GUI. Supports placeholders. */
     @Setter
     protected String title;
+
+    /** The player who has this GUI open. */
     protected Player player;
     private final GuiType guiType;
     private final HashMap<String, String> placeholders;
 
+    /** Constructor
+     *
+     * @param guiType The type of GUI to create.
+     */
     public Gui(GuiType guiType) {
         this.guiType = guiType;
         this.placeholders = new HashMap<>();

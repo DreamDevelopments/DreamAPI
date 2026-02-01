@@ -10,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 
+/** Manager class for {@link Gui} that stores all open inventories. */
 public final class GuiManager {
 
     @Getter

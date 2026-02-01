@@ -149,6 +149,11 @@ public class ItemUtils {
         return newItem;
     }
 
+    /**
+     * Get the texture URL from a base64 encoded texture string
+     * @param base64 The base64 encoded string
+     * @return The texture URL
+     */
     public static String getTextureURL(String base64) {
         return new String(Base64.getDecoder().decode(base64)).split("\"SKIN\":\\{\"url\":\"")[1].split("\"}")[0];
     }

@@ -5,6 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
+/** Listener to handle GUI events such as clicks and closes. */
 public class GuiListener implements Listener {
 
     @EventHandler

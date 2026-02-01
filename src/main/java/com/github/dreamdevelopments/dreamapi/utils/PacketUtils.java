@@ -30,6 +30,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+/**
+ * Utility class for handling packets related to inventories using ProtocolLib.
+ * It is used for hiding the contents of players inventories when opening custom GUIs.
+ */
 public class PacketUtils {
 
     @Getter

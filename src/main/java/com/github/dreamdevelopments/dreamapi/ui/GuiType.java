@@ -11,6 +11,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
+/**
+ * Represents a type of GUI inventory.
+ * Contains the layout and behavior of the GUI.
+ */
 @Getter
 public class GuiType {
 
