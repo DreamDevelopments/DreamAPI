@@ -46,12 +46,12 @@ public class PacketUtils {
     private ProtocolManager protocolManager;
 
     @Getter
-    private final HashMap<UUID, InventoryPlayer> playerInventories = new HashMap<>();
+    private final HashMap<String, InventoryPlayer> playerInventories = new HashMap<>();
 
     private PacketContainer inventoryClearPacket;
     private List<ItemStack> emptyInventory;
     @Getter
-    private final HashMap<UUID, InventoryData> hiddenInventoriesPlayers = new HashMap<>();
+    private final HashMap<String, InventoryData> hiddenInventoriesPlayers = new HashMap<>();
 
     private boolean hideInventories;
 
@@ -92,11 +92,11 @@ public class PacketUtils {
         return new PacketAdapter(plugin, ListenerPriority.HIGH, PacketType.Play.Server.OPEN_WINDOW) {
             @Override
             public void onPacketSending(PacketEvent event) {
-                final UUID uuid = event.getPlayer().getUniqueId();
+                final String name = event.getPlayer().getName();
 
                 final int windowId = event.getPacket().getIntegers().read(0);
 
-                InventoryPlayer oldInventory = playerInventories.get(uuid);
+                InventoryPlayer oldInventory = playerInventories.get(name);
                 if(oldInventory != null && oldInventory.windowId() == windowId)
                     return;
 
@@ -113,7 +113,7 @@ public class PacketUtils {
                 }
 
                 InventoryPlayer player = new InventoryPlayer(windowId, containerType, titleJson);
-                playerInventories.put(uuid, player);
+                playerInventories.put(name, player);
             }
         };
     }
@@ -199,7 +199,7 @@ public class PacketUtils {
 
     public static void hidePlayerInventory(Player player) {
         Bukkit.getScheduler().runTask(DreamAPI.getInstance().getPlugin(), () -> {
-            PacketUtils.getInstance().hiddenInventoriesPlayers.put(player.getUniqueId(), new InventoryData(player.getOpenInventory().getTopInventory().getSize(), System.currentTimeMillis()));
+            PacketUtils.getInstance().hiddenInventoriesPlayers.put(player.getName(), new InventoryData(player.getOpenInventory().getTopInventory().getSize(), System.currentTimeMillis()));
             PacketUtils.getInstance().sendInventoryClearPacket(player);
         });
     }
